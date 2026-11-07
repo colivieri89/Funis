@@ -5,6 +5,7 @@ title: "Funis: equilibrium and form-finding of spatial compression paths"
 version: 1.0.0
 license: MIT
 doi: 10.5281/zenodo.24040974
+repository-code: "https://github.com/colivieri89/Funis"
 authors:
   - family-names: Olivieri
     given-names: Carlo
