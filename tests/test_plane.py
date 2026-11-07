@@ -267,7 +267,9 @@ def test_unsafe_arch_has_a_factor_below_one():
 
 
 def _qt_available():
-    """A QApplication can be created: probed in a subprocess, since a missing system library aborts Qt."""
+    """A QApplication can be created: probed in a subprocess, since a missing system library (libEGL on a
+    bare Linux server) makes the import fail and other gaps abort Qt. Recent pytest no longer turns such an
+    ImportError into a skip in importorskip, so the probe comes before any import of PySide6."""
     import os
     import subprocess
     import sys
@@ -280,7 +282,6 @@ def _qt_available():
 
 
 def test_ui_round_trip_of_the_plane_examples():
-    pytest.importorskip("PySide6.QtWidgets")
     if not _qt_available():
         pytest.skip("Qt cannot create an application here")
     from PySide6.QtWidgets import QApplication
