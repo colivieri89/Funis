@@ -79,4 +79,4 @@ See `CITATION.cff`.
 
 ## Licence
 
-No licence has been chosen yet. Until a licence file is added, the default copyright of the author applies.
+Funis is released under the MIT License: see `LICENSE`. The installers also contain third-party libraries under their own licences, among them Qt for Python (PySide6, LGPL-3.0), NumPy, SciPy and Matplotlib.

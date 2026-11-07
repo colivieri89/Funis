@@ -104,7 +104,8 @@ class AboutDialog(QDialog):
             "compression paths under multidirectional loading through Linear Arch Static "
             "Analysis</i>.</p>"
             "<p>Units: lengths in m, forces in kN, densities in kN per metre of projected length. "
-            "Tension positive, compression S ≤ 0.</p>")
+            "Tension positive, compression S ≤ 0.</p>"
+            "<p>Released under the MIT License. Copyright (c) 2026 Carlo Olivieri.</p>")
         body.setWordWrap(True)
         body.setTextFormat(Qt.RichText)
         lay.addWidget(body)
