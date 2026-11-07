@@ -48,7 +48,12 @@ STAGE=dist/dmg
 rm -rf "$STAGE" && mkdir -p "$STAGE"
 cp -R "$APP" "$STAGE/"
 ln -s /Applications "$STAGE/Applications"
-hdiutil create -volname "Funis" -srcfolder "$STAGE" -ov -format UDZO "$DMG" >/dev/null
+# hdiutil now and then fails with "Resource busy" on build servers: try again
+for attempt in 1 2 3 4 5; do
+  if hdiutil create -volname "Funis" -srcfolder "$STAGE" -ov -format UDZO "$DMG" >/dev/null; then break; fi
+  if [ "$attempt" -eq 5 ]; then echo "hdiutil could not create $DMG" >&2; exit 1; fi
+  sleep 10
+done
 rm -rf "$STAGE"
 
 echo

@@ -35,6 +35,7 @@ jobs:
         with:
           name: Funis-Windows
           path: dist/*.exe
+          if-no-files-found: error
 
   macos:
     needs: tests
@@ -52,6 +53,7 @@ jobs:
           path: |
             dist/*.pkg
             dist/*.dmg
+          if-no-files-found: error
 
   release:
     # On a tag v*, attach the installers to a GitHub Release of that tag.
