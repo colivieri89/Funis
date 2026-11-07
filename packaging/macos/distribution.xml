@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<installer-gui-script minSpecVersion="1">
+    <title>Funis @VERSION@</title>
+    <welcome file="welcome.html" mime-type="text/html"/>
+    <conclusion file="conclusion.html" mime-type="text/html"/>
+    <options customize="never" require-scripts="false" rootVolumeOnly="true"/>
+    <domains enable_localSystem="true" enable_currentUserHome="false"/>
+    <choices-outline>
+        <line choice="default">
+            <line choice="org.funis.app"/>
+        </line>
+    </choices-outline>
+    <choice id="default"/>
+    <choice id="org.funis.app" visible="false">
+        <pkg-ref id="org.funis.app"/>
+    </choice>
+    <pkg-ref id="org.funis.app" version="@VERSION@" onConclusion="none">Funis-component.pkg</pkg-ref>
+</installer-gui-script>

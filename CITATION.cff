@@ -1,0 +1,27 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+type: software
+title: "Funis: equilibrium and form-finding of spatial compression paths"
+version: 1.0.0
+authors:
+  - family-names: Olivieri
+    given-names: Carlo
+    orcid: "https://orcid.org/0000-0002-3548-846X"
+    affiliation: "Department of Engineering, Pegaso Telematic University, Naples, Italy"
+abstract: >-
+  Desktop application for the analytical Linear Arch Static Analysis (LASA)
+  of continuous spatial compression paths under vertical and horizontal
+  loads: supported paths with their lateral reactions and contact
+  conditions, paths without reactions, form-finding of free curves and node
+  equilibrium under concentrated forces. In the plane it gives the funicular
+  line under vertical and horizontal loads and the thrust line assessment of
+  arches of finite thickness.
+keywords:
+  - Linear Arch Static Analysis
+  - spatial compression paths
+  - form-finding
+  - masonry
+  - funicular
+  - catenary
+  - thrust line
+  - masonry arches

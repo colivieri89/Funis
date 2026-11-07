@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8"><title>Funis user guide</title>
+<style>
+body { font-family: -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif; color: #243b53; line-height: 1.45; }
+h1 { font-size: 20px; } h2 { font-size: 16px; margin-top: 22px; border-bottom: 1px solid #dfe5ec; }
+code { background: #f1f4f8; padding: 1px 4px; border-radius: 3px; }
+table { border-collapse: collapse; } td, th { border: 1px solid #dfe5ec; padding: 4px 8px; font-size: 13px; }
+</style></head><body>
+<h1>Funis</h1>
+<p>Analytical Linear Arch Static Analysis (LASA) of continuous spatial compression paths under vertical and horizontal loads, following C. Olivieri, <i>Equilibrium and form-finding of spatial compression paths under multidirectional loading through Linear Arch Static Analysis</i>.</p>
+<p>A path is described by its projected arc length s: x*(s) = x(s) + f(s) e<sub>3</sub>, with the projected unit tangent t, the left normal n = e<sub>3</sub> &times; t, the projected curvature &rho;, the grade f<sub>,s</sub> and J = &radic;(1 + f<sub>,s</sub><sup>2</sup>). The force on the positive cut is F = S u = N T, with u = t + f<sub>,s</sub> e<sub>3</sub>, the thrust S = F &middot; t and the axial force N = S J.</p>
+<p>Units: lengths in metres, forces in kilonewtons, load densities in kN per metre of <b>projected</b> length, angles in degrees in the input. Tension is positive, so compression is S &le; 0 and N &le; 0. A downward load has p<sub>3</sub> &lt; 0. Reactions are forces on the line.</p>
+
+<h2>Workflow</h2>
+<ol>
+<li>Choose the <b>task</b> in the Problem box.</li>
+<li>Fill in the sections that appear: geometry or free curve, loads, point actions, support, contact, output.</li>
+<li>Press <b>Run</b> (F5) or leave <b>Run automatically</b> on: every change is solved after a short pause.</li>
+<li>Read the Summary, the Views, the Graphs, the Contact diagrams (the admissible thrusts for an arch), the Spatial view and the Tables.</li>
+<li>Export the drawings (PDF, SVG, PNG, DXF), the tables (CSV, Excel, JSON) or a complete HTML report from the Export menu. Save the project (<code>.funis</code>) to reopen it later.</li>
+</ol>
+<p>The <b>Examples</b> menu contains the cases of the article (figure and section numbers refer to it), three reference cases (a catenary, a parabolic arch and a free curve with a point force) and the plane cases: funiculars checked against their closed forms, and arches of several shapes, among them the semicircular arch of minimum thickness. Load one and modify it.</p>
+
+<h2>Geometry</h2>
+<table>
+<tr><th>Generator</th><th>Path</th></tr>
+<tr><td>Circular helix</td><td>(R cos &theta;, R sin &theta;, c (&theta; &minus; &theta;<sub>0</sub>)), s = R (&theta; &minus; &theta;<sub>0</sub>), grade c / R.</td></tr>
+<tr><td>Elliptical helix</td><td>(a cos &theta;, b sin &theta;, f) with f = c (&theta; &minus; &theta;<sub>0</sub>) or f = k<sub>s</sub> s.</td></tr>
+<tr><td>Smooth path through points</td><td>A cubic spline through a table of points, re-parametrized by the projected length. The plan must not stop or turn back.</td></tr>
+</table>
+<p>The number of samples fixes the resolution of the integrals along s (Simpson rule). Point actions add a node to the samples, where every quantity has a value before and after the node.</p>
+
+<h2>Loads</h2>
+<p>The vertical load is p<sub>3</sub> = &minus;w(s): a polynomial or a table per projected metre, or a polynomial per metre of actual length (self-weight, then p<sub>3</sub> = &minus;w J). The horizontal load can be absent, a profile h(s) in a fixed direction &beta; (polynomial or table), pseudo-static h = &gamma; |p<sub>3</sub>| along &beta;, or two polynomial components p<sub>1</sub>(s), p<sub>2</sub>(s). The multiplier &lambda; scales the horizontal load. Point actions G are concentrated forces at a given s.</p>
+
+<h2>Supported path (assessment)</h2>
+<p>The geometry is prescribed and a lateral support supplies horizontal reactions only (r<sub>3</sub> = 0). The preload T = &minus;S(0) is the compressive end thrust at the start. Vertical balance gives V = C<sub>3</sub> &minus; P<sub>3</sub>(s), S = V / f<sub>,s</sub> and N = S J, and the reactions are r<sub>t</sub> = &minus;S<sub>,s</sub> &minus; p<sub>h</sub> &middot; t and r<sub>n</sub> = &minus;&rho; S &minus; p<sub>h</sub> &middot; n. A horizontal load leaves S unchanged and shifts the reaction by &minus;p<sub>h</sub> (the dashed arrows in the plan show the reaction of the vertical load alone). The path must have a non-zero grade everywhere.</p>
+<p>A point action G at s<sub>j</sub> with no vertical support impulse makes the thrust jump by [S] = &minus;G<sub>3</sub> / f<sub>,s</sub> and requires the horizontal point reaction R<sub>h</sub> = (G<sub>3</sub> / f<sub>,s</sub>) t &minus; G<sub>h</sub>.</p>
+<p><b>Contact.</b> The wall is on the right or on the left of the direction of travel, so that r<sub>&nu;</sub> = &plusmn; r<sub>n</sub> presses the line against it. The reaction is admissible when r<sub>&nu;</sub> &ge; 0 and |r<sub>t</sub>| &le; &eta; r<sub>&nu;</sub>, with &eta; = min(&mu;, &phi;) and &phi; = L<sub>sw</sub> / (2&delta;) for a centred strip of width L<sub>sw</sub> at the distance &delta; of the wall (&delta; = 0 removes the strip limit). The contact margin min(r<sub>&nu;</sub>, &eta; r<sub>&nu;</sub> &minus; |r<sub>t</sub>|) is non-negative exactly inside the cone. Since every reaction is affine in T and &lambda;, the program gives the interval of admissible preloads, the interval of admissible multipliers, the convex region of admissible pairs (T, &lambda;), the admissible horizontal loads turned to every direction at the given preload, and the minimum preload along three load directions. For a descending circular helix with constant loads the summary also gives the exact bound of Appendix A of the article.</p>
+<p>A violated contact cone means that the assumed wall cannot supply the required reaction. It is not a loss of compression of the line, and the bounds are not a collapse load.</p>
+
+<h2>Path without reactions</h2>
+<p>Without reactions the force is F = C &minus; P(s), with P the primitive of the loads and of the point forces. The prescribed path is an axial equilibrium only if F is parallel to u everywhere.</p>
+<ul>
+<li><b>Check the loads</b>: the least-squares initial force C and the largest transverse force |F &minus; S u|. A transverse force that is not small disproves the equilibrium for every C.</li>
+<li><b>Loads in a fixed vertical plane</b> spanned by e<sub>3</sub> and d(&beta;): the component F &middot; m = B along m = e<sub>3</sub> &times; d is conserved, so S = B / (t &middot; m), and the compatible loads follow from p = &minus;F<sub>,s</sub>. Compression needs t &middot; m of opposite sign to B, which restricts the path to part of a half-turn.</li>
+<li><b>Loads for a prescribed thrust</b> S(s): p = &minus;(S u)<sub>,s</sub>, in general with three components.</li>
+</ul>
+
+<h2>Unknown geometry (form-finding)</h2>
+<p>The loads are given as functions of s and the curve follows from x*<sub>,s</sub> = &minus;F / Q with Q = |F<sub>h</sub>| &gt; 0, by quadrature from the initial force C = F(0) and the start point. Then S = &minus;Q and N = &minus;|F|. With a weight per actual length the force and the position are integrated together. With a prescribed second support the initial force is found by a damped Newton correction with the exact endpoint Jacobian, starting from an estimate; every iterate keeps Q &gt; 0. The summary gives the eigenvalues of the plan block K of the Jacobian, the distance from the plane of C and p(0) (zero for parallel loads), and, for constant loads, the difference from the closed form of Appendix B. The graphs give the curvature &kappa; = Q |F &times; p| / |F|<sup>3</sup> and the torsion &tau; = &minus;Q F &middot; (p &times; p<sub>,s</sub>) / |F &times; p|<sup>2</sup>.</p>
+
+<h2>Node under a concentrated force</h2>
+<p>F<sup>+</sup> = F<sup>&minus;</sup> &minus; G &minus; R and the members follow T = &minus;F / |F|. The force polygon is drawn in the plane of the forces.</p>
+
+<h2>Plane funicular (catenary)</h2>
+<p>The line lies in the vertical plane of e<sub>1</sub> and e<sub>3</sub>, between the supports A = (0, 0) and B = (L, z<sub>B</sub>), and is described by its height z = f(x) over the horizontal abscissa x. Without reactions the force is F = C &minus; P(x), with P the primitive of the loads and of the point loads, and the line follows f<sub>,x</sub> = F<sub>3</sub> / F<sub>1</sub>. Compression needs F<sub>1</sub> &lt; 0 everywhere: the thrust is H = &minus;F<sub>1</sub> and the axial force N = &minus;|F|. The reactions are R<sub>A</sub> = &minus;F(0) and R<sub>B</sub> = F(L).</p>
+<ul>
+<li><b>Vertical load</b> p<sub>3</sub> = &minus;w(x): per metre of actual length (self-weight, the catenary), per metre of x (the parabola for a constant w), or a table per metre of x. A load per actual length is multiplied by J = |F| / |F<sub>1</sub>| and the force and the line are integrated together.</li>
+<li><b>Horizontal load</b> p<sub>1</sub> along e<sub>1</sub>: none, a polynomial h(x) per metre of x, or pseudo-static p<sub>1</sub> = &gamma; w in the measure of w, so that the total load keeps a fixed direction. A horizontal load makes the thrust vary along the line. Where F<sub>1</sub> would reach zero the line turns vertical and the program stops with a message.</li>
+<li><b>Point loads</b> (x, G<sub>1</sub>, G<sub>3</sub>) make the force jump by &minus;G and the line has a corner there. Point loads alone give the funicular polygon.</li>
+<li><b>Line</b>: through a point (x<sub>c</sub>, z<sub>c</sub>) and the second support, with a prescribed thrust H<sub>A</sub> and the second support, or from a prescribed initial force F(0), in which case the line ends where the loads take it.</li>
+</ul>
+<p>Where a closed form exists the summary gives its largest distance from the integrated line: the parabola (constant w per metre of x), the catenary (constant w per metre of actual length), the logarithmic branch of Appendix B of the article (constant w and h per metre of x) and the catenary with an inclined axis (constant w per actual length with the pseudo-static load).</p>
+
+<h2>Arch assessment (thrust line)</h2>
+<p>The arch has a centre line between the centres of the springings at (0, 0) and (L, 0), circular (segmental or semicircular), pointed (two-centred), elliptical, parabolic, catenary or a spline through points, with rise f. The intrados and the extrados are offset from the centre line along its normal, and the thickness varies linearly along the centre line from t at the crown to its value at the springings. The depth b normal to the plane multiplies every area.</p>
+<p>The arch is cut into slices by <b>joints</b>, either normal to the centre line (voussoir joints) or vertical sections. Each slice carries its own weight at its centroid. The <b>fill</b> up to a level x<sub>3</sub> and a uniform <b>surcharge</b> load the extrados vertically, column by column, and have no strength of their own. <b>Point loads</b> (x, G<sub>1</sub>, G<sub>3</sub>) act on the extrados at the abscissa x. The <b>horizontal action</b> is a fraction &lambda; of the weights, of the arch and, if chosen, of the fill, applied at the same centroids.</p>
+<p>A thrust line is the line of the centres of pressure of the resultant forces on the joints. The force on joint j is F<sub>j</sub> = C &minus; P<sub>j</sub>, with C the force at the springing A and P<sub>j</sub> the sum of the loads of the slices before the joint, and the moment follows in the same way, so every line is fixed by three numbers. The line is admissible where its centre of pressure lies on every joint between the intrados and the extrados and the force compresses the joint. These conditions are linear in the three numbers, and the program solves them as linear programs (Heyman's safe theorem: if one admissible line exists the arch does not collapse under the given loads).</p>
+<ul>
+<li><b>Minimum and maximum thrust</b>: the admissible lines with the least and the largest horizontal thrust H<sub>A</sub>, with the joints where they touch a face.</li>
+<li><b>Line through three points</b>: the line with prescribed eccentricities e / t at the springing A, at the crown and at the springing B, from &minus;1/2 (intrados) to 1/2 (extrados). It is reported even when it leaves the arch.</li>
+<li><b>Geometric safety factor</b>: the joints are shrunk about their centres until a line just fits, with the same loads; the factor is the actual thickness over the thickness of this reduced arch. A factor below 1 means that no line lies within the arch.</li>
+<li><b>Collapse multiplier</b> of the horizontal action or of the point loads: the largest multiplier for which an admissible line exists. The line touches the faces at the hinges of the mechanism, and with four hinges and no friction limit the summary checks the multiplier by the virtual work of the mechanism through them.</li>
+<li><b>Minimum thickness</b>: the least factor on every thickness for which a line fits, with the weights recomputed for the thinner arch. For the semicircular arch under its own weight on normal joints this is the classical t / R = 0.1075 with hinges near 54.5&deg; from the crown.</li>
+<li><b>Friction</b>: with a coefficient &mu; &gt; 0 every joint also needs |V| &le; &mu; |N|. With 0 sliding is excluded, as Heyman assumes, and the summary gives the friction that the selected line needs.</li>
+</ul>
+<p>The drawings show the arch to scale with the lines, the loads, the collapse mechanism with its hinges, the reduced arch of the geometric safety factor and the arch of minimum thickness, together with the eccentricity e / t and the forces along the arch and the admissible thrusts against the multiplier. The tables list the joints, the eccentricities, the hinges and the loads of the slices.</p>
+
+<h2>Checks</h2>
+<p>Every result carries independent checks in the Balance table: the resultant force and moment of all actions on the line, including the end forces and the point actions, and a finite-difference test of the local equations F<sub>,s</sub> + p + r = 0. Values are normalised by the sum of the magnitudes of the actions. For an arch the balance is that of the selected line with the reactions at the springings and the loads of all the slices.</p>
+
+<h2>Exports</h2>
+<p>Drawings can be fitted to a width or, for plans, elevations and diagrams in kN or kN/m, written to scale without axes with a scale bar. Graphs along the path are always fitted. The DXF file contains the views to scale and the spatial path as a 3D polyline. The HTML report contains the summary, every drawing, every table and the input.</p>
+</body></html>
