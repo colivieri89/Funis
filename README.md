@@ -1,5 +1,7 @@
 # Funis
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.24040974.svg)](https://doi.org/10.5281/zenodo.24040974)
+
 Equilibrium and form-finding of spatial compression paths: the analytical Linear Arch Static Analysis (LASA) of continuous spatial compression paths under vertical and horizontal loads. The equations follow C. Olivieri, *Equilibrium and form-finding of spatial compression paths under multidirectional loading through Linear Arch Static Analysis*.
 
 Funis is a desktop application for Windows and macOS. It needs no other software: the installers contain everything, Python included.
@@ -75,7 +77,7 @@ The user guide is available from the Help menu and in `funis/assets/user_guide.h
 
 ## Citation
 
-See `CITATION.cff`.
+See `CITATION.cff`. Every release is archived on Zenodo. The DOI [10.5281/zenodo.24040974](https://doi.org/10.5281/zenodo.24040974) refers to all versions and resolves to the latest one.
 
 ## Licence
 
