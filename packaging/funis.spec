@@ -31,7 +31,7 @@ highs = [m for m in ("scipy.optimize._highspy", "scipy.optimize._highs._highs_wr
                      "scipy.optimize._highs._highs_constants") if _present(m)]
 
 excludes = [
-    "tkinter", "_tkinter", "test", "pydoc", "IPython", "jupyter", "notebook",
+    "tkinter", "_tkinter", "test", "IPython", "jupyter", "notebook",  # not pydoc: recent SciPy imports it at start
     "PySide6.QtWebEngineCore", "PySide6.QtWebEngineWidgets", "PySide6.QtWebEngineQuick",
     "PySide6.QtWebChannel", "PySide6.QtWebSockets", "PySide6.QtQml", "PySide6.QtQuick",
     "PySide6.QtQuickWidgets", "PySide6.QtQuick3D", "PySide6.Qt3DCore", "PySide6.Qt3DRender",

@@ -26,10 +26,21 @@ if (Test-Path dist) { Remove-Item dist -Recurse -Force }
 & $venv -m PyInstaller --noconfirm --clean --log-level WARN packaging\funis.spec
 if (-not (Test-Path "dist\Funis\Funis.exe")) { throw "PyInstaller did not produce dist\Funis\Funis.exe" }
 
-# the packaged program must start and solve every example
+# the packaged program must start and solve every example. It has no console, so it writes its
+# report to build\selftest.log; the time limit guards against a program that never closes.
 $env:QT_QPA_PLATFORM = "offscreen"
-& "dist\Funis\Funis.exe" --selftest build\selftest.png | Out-Default
-if ($LASTEXITCODE -ne 0) { throw "The packaged program failed its self-test (exit code $LASTEXITCODE)" }
+$root = (Get-Location).Path
+$log = Join-Path $root "build\selftest.log"
+$proc = Start-Process -FilePath (Join-Path $root "dist\Funis\Funis.exe") -WorkingDirectory $root `
+    -ArgumentList @("--selftest", "`"$(Join-Path $root 'build\selftest.png')`"") -PassThru
+$null = $proc.Handle  # keeps the exit code readable after the process ends
+if (-not $proc.WaitForExit(900000)) {
+    Stop-Process -Id $proc.Id -Force
+    throw "The packaged program did not finish its self-test within 15 minutes"
+}
+if (Test-Path $log) { Get-Content $log | ForEach-Object { Write-Host $_ } }
+else { Write-Warning "No self-test report was written ($log)" }
+if ($proc.ExitCode -ne 0) { throw "The packaged program failed its self-test (exit code $($proc.ExitCode))" }
 Remove-Item Env:QT_QPA_PLATFORM
 
 if ($InnoSetup -eq "") {
