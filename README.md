@@ -8,7 +8,7 @@
 
 Equilibrium and form-finding of spatial compression paths: the analytical Linear Arch Static Analysis (LASA) of continuous spatial compression paths under vertical and horizontal loads. The equations follow C. Olivieri, *Equilibrium and form-finding of spatial compression paths under multidirectional loading through Linear Arch Static Analysis*.
 
-Funis is a desktop application for Windows and macOS. It needs no other software: the installers contain everything, Python included. **[Download the installers from the latest release.](https://github.com/colivieri89/Funis/releases/latest)**
+Funis is a desktop application for Windows and macOS. It needs no other software: the installers contain everything, Python included. **[Download the installers from the latest release.](https://github.com/colivieri89/Funis/releases/latest)** The **[user manual (PDF)](docs/Funis_User_Manual.pdf)** covers installation, the interface, every task with its input, method and results, worked examples, exports and messages.
 
 ![Funis: a descending helical path under vertical and horizontal loads with its lateral reactions, in the rotatable spatial view](docs/screenshots/spatial_view.png)
 
@@ -100,10 +100,11 @@ funis/
   assets/      icon and user guide
 packaging/     PyInstaller spec, macOS and Windows build scripts, Inno Setup script, icon and screenshots
 tests/         pytest suite
-docs/          screenshots of this README (python packaging/make_screenshots.py)
+docs/          user manual (Funis_User_Manual.pdf, built by docs/manual/make_manual.py)
+               and screenshots of this README (python packaging/make_screenshots.py)
 ```
 
-The user guide is available from the Help menu and in `funis/assets/user_guide.html`.
+The user manual is `docs/Funis_User_Manual.pdf`; its source and build script are in `docs/manual/`, and it is rebuilt for every change of the program (`tests/test_manual.py` checks that it matches the version, the tasks and the examples). The short user guide is available from the Help menu and in `funis/assets/user_guide.html`.
 
 ## Citation
 

@@ -59,18 +59,21 @@ jobs:
           if-no-files-found: error
 
   release:
-    # On a tag v*, attach the installers to a GitHub Release of that tag.
+    # On a tag v*, attach the installers and the user manual to a GitHub Release of that tag.
     if: startsWith(github.ref, 'refs/tags/v')
     needs: [windows, macos]
     runs-on: ubuntu-latest
     permissions:
       contents: write
     steps:
+      - uses: actions/checkout@v4
       - uses: actions/download-artifact@v4
         with:
           path: installers
           merge-multiple: true
       - uses: softprops/action-gh-release@v2
         with:
-          files: installers/*
+          files: |
+            installers/*
+            docs/Funis_User_Manual.pdf
           generate_release_notes: true

@@ -1,0 +1,1506 @@
+% Funis user manual. Build with: .venv/bin/python docs/manual/make_manual.py
+% The files under build/ are written by make_manual.py from the program itself.
+\documentclass[fontsize=10.5pt,paper=a4,parskip=half,headings=normal,numbers=noenddot,
+  open=any,bibliography=totoc,captions=tableheading]{scrreprt}
+
+\usepackage[top=2.6cm,bottom=2.8cm,left=2.5cm,right=2.5cm,headsep=0.9cm,footskip=1.2cm]{geometry}
+\usepackage{fontspec}
+\usepackage{unicode-math}
+\setmainfont{STIX Two Text}
+\setmathfont{STIX Two Math}
+\setsansfont{texgyreheros}[Extension=.otf,UprightFont=*-regular,BoldFont=*-bold,
+  ItalicFont=*-italic,BoldItalicFont=*-bolditalic,Scale=0.92]
+\setmonofont{Inconsolatazi4}[Extension=.otf,UprightFont=*-Regular,BoldFont=*-Bold,Scale=0.92]
+\usepackage{newunicodechar}
+\newunicodechar{≤}{\ensuremath{\leq}}
+\newunicodechar{≥}{\ensuremath{\geq}}
+\newunicodechar{×}{\ensuremath{\times}}
+\newunicodechar{∞}{\ensuremath{\infty}}
+\newunicodechar{≈}{\ensuremath{\approx}}
+\newunicodechar{→}{\ensuremath{\rightarrow}}
+\newfontfamily\symbolfont{STIX Two Math}
+\newunicodechar{⌘}{{\symbolfont ⌘}}
+\newunicodechar{⇧}{{\symbolfont ⇧}}
+\newunicodechar{₀}{\textsubscript{0}}
+\newunicodechar{₁}{\textsubscript{1}}
+\newunicodechar{₂}{\textsubscript{2}}
+\newunicodechar{₃}{\textsubscript{3}}
+\newunicodechar{ₜ}{\textsubscript{t}}
+\newunicodechar{ₙ}{\textsubscript{n}}
+\newunicodechar{⁻}{\textsuperscript{−}}
+\newunicodechar{⁺}{\textsuperscript{+}}
+
+\usepackage[dvipsnames]{xcolor}
+\definecolor{ink}{HTML}{243B53}
+\definecolor{accent}{HTML}{1F6FEB}
+\definecolor{muted}{HTML}{6B7A8C}
+\definecolor{border}{HTML}{D9E0E8}
+\definecolor{panel}{HTML}{F4F6F9}
+\definecolor{reaction}{HTML}{A04460}
+\definecolor{vertical}{HTML}{007C83}
+\definecolor{horizontal}{HTML}{B57726}
+
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{needspace}
+\graphicspath{{build/figures/}{../../funis/assets/}}
+\usepackage{tikz}
+\usetikzlibrary{calc,positioning}
+\usepackage{booktabs,tabularx,longtable,array,multirow,xltabular}
+\usepackage{enumitem}
+\setlist{itemsep=2pt,topsep=3pt,parsep=0pt}
+\setlist[description]{font=\sffamily\bfseries\color{ink}}
+\usepackage[font=small,labelfont={sf,bf},labelsep=period,skip=5pt]{caption}
+\usepackage[most]{tcolorbox}
+\usepackage{microtype}
+\usepackage[hyphens]{url}
+\usepackage[colorlinks=true,linkcolor=ink,urlcolor=accent,citecolor=ink,
+  pdfauthor={Carlo Olivieri},pdfsubject={User manual of Funis},
+  pdfkeywords={Funis, Linear Arch Static Analysis, LASA, form-finding, funicular, thrust line, masonry arches},
+  bookmarksnumbered=true]{hyperref}
+\usepackage{scrlayer-scrpage}
+
+\input{build/generated/metadata.tex}
+\hypersetup{pdftitle={Funis \FunisVersion{} User Manual}}
+
+% ----------------------------------------------------------------- headings and page style
+\addtokomafont{disposition}{\color{ink}}
+\addtokomafont{chapter}{\Huge}
+\renewcommand*{\chapterformat}{\mbox{\color{accent}\thechapter\enskip}}
+\RedeclareSectionCommand[beforeskip=0pt,afterskip=1.4\baselineskip]{chapter}
+\RedeclareSectionCommand[beforeskip=1.3\baselineskip,afterskip=0.5\baselineskip]{section}
+\RedeclareSectionCommand[beforeskip=1.0\baselineskip,afterskip=0.3\baselineskip]{subsection}
+\pagestyle{scrheadings}
+\clearpairofpagestyles
+\automark[chapter]{chapter}
+\ihead{\sffamily\small\color{muted}\leftmark}
+\ohead{\sffamily\small\color{muted}Funis \FunisVersion{} User Manual}
+\cfoot*{\sffamily\small\color{muted}\pagemark}
+\setkomafont{pageheadfoot}{\normalfont}
+\renewcommand{\arraystretch}{1.18}
+\setlength{\emergencystretch}{1.5em}
+\renewcommand{\topfraction}{0.9}
+\renewcommand{\bottomfraction}{0.8}
+\renewcommand{\textfraction}{0.07}
+\renewcommand{\floatpagefraction}{0.75}
+\setcounter{topnumber}{3}
+\setcounter{totalnumber}{5}
+\numberwithin{figure}{chapter}
+\numberwithin{table}{chapter}
+
+% ----------------------------------------------------------------- notation and interface elements
+\newcommand{\e}{\hat{\mathbf e}}
+\newcommand{\x}{\mathbf x}
+\newcommand{\F}{\mathbf F}
+\newcommand{\G}{\mathbf G}
+\newcommand{\R}{\mathbf R}
+\newcommand{\C}{\mathbf C}
+\newcommand{\Pv}{\mathbf P}
+\newcommand{\T}{\hat{\mathbf T}}
+\newcommand{\tv}{\hat{\mathbf t}}
+\newcommand{\nv}{\hat{\mathbf n}}
+\newcommand{\uv}{\mathbf u}
+\newcommand{\pp}{\mathbf p}
+\newcommand{\rr}{\mathbf r}
+\newcommand{\dv}{\hat{\mathbf d}}
+\newcommand{\mv}{\hat{\mathbf m}}
+\newcommand{\menu}[1]{{\sffamily\bfseries\color{ink}#1}}
+\newcommand{\ui}[1]{{\sffamily\color{ink}#1}}
+\newcommand{\file}[1]{\texttt{#1}}
+\newcommand{\kbd}[1]{\tikz[baseline=(k.base)]\node[draw=muted,rounded corners=1.5pt,inner xsep=2.5pt,
+  inner ysep=1.2pt,font=\sffamily\footnotesize,fill=panel](k){#1};}
+\newcommand{\badge}[1]{\tikz[baseline=(b.base)]\node[circle,fill=accent,text=white,inner sep=0.8pt,
+  minimum size=12pt,font=\sffamily\bfseries\scriptsize](b){#1};}
+
+% numbered callout on a screenshot: number, target x, y, badge x, y (fractions of the image)
+\newcommand{\callout}[5]{\draw[accent,line width=0.6pt] (#4,#5) -- (#2,#3);
+  \fill[accent] (#2,#3) circle (1.4pt);
+  \node[circle,fill=accent,text=white,inner sep=0.8pt,minimum size=13pt,font=\sffamily\bfseries\scriptsize]
+    at (#4,#5) {#1};}
+
+\newtcolorbox{note}[1][Note]{enhanced,breakable,colback=panel,colframe=accent,boxrule=0pt,
+  leftrule=2.5pt,arc=0pt,outer arc=0pt,left=8pt,right=8pt,top=5pt,bottom=5pt,
+  fonttitle=\sffamily\bfseries\small,coltitle=accent,attach title to upper={\enskip},title={#1}}
+\newtcolorbox{caution}[1][Caution]{enhanced,breakable,colback=reaction!6,colframe=reaction,boxrule=0pt,
+  leftrule=2.5pt,arc=0pt,outer arc=0pt,left=8pt,right=8pt,top=5pt,bottom=5pt,
+  fonttitle=\sffamily\bfseries\small,coltitle=reaction,attach title to upper={\enskip},title={#1}}
+
+% screenshot with a thin frame: \shot[width]{file}
+\newcommand{\shot}[2][\linewidth]{{\setlength{\fboxsep}{0pt}\setlength{\fboxrule}{0.4pt}%
+  \color{border}\fbox{\includegraphics[width=\dimexpr#1-0.8pt\relax]{#2}}}}
+
+% table of the fields of an input section
+\newenvironment{fields}{\par\needspace{6\baselineskip}\small\setlength{\LTpre}{2pt}\setlength{\LTpost}{2pt}%
+  \xltabular{\linewidth}{@{}>{\leavevmode\color{ink}\sffamily\raggedright\arraybackslash}p{0.33\linewidth}>{\raggedright\arraybackslash}p{0.11\linewidth}X@{}}
+  \toprule \normalfont\bfseries Field & \bfseries Unit & \bfseries Meaning\\ \midrule\endhead
+  \bottomrule\endfoot}
+  {\endxltabular}
+
+% summary of a worked example, generated from the program
+\newcommand{\summarytable}[1]{{\par\needspace{10\baselineskip}\small\setlength{\LTpre}{2pt}\setlength{\LTpost}{2pt}%
+  \begin{xltabular}{\linewidth}{@{}>{\leavevmode\color{ink}\sffamily\raggedright\arraybackslash}p{0.34\linewidth}>{\raggedright\arraybackslash}X@{}}
+  \toprule \normalfont\bfseries Quantity & \bfseries Value\\ \midrule\endhead
+  \bottomrule\endfoot #1 \end{xltabular}\par}}
+
+\input{build/generated/summaries.tex}
+\input{build/generated/examples.tex}
+
+\begin{document}
+
+% ----------------------------------------------------------------- title page
+\begin{titlepage}
+\begin{tikzpicture}[remember picture,overlay]
+  \fill[ink] (current page.north west) rectangle ([yshift=-9.2cm]current page.north east);
+  \fill[accent] ([yshift=-9.2cm]current page.north west) rectangle ([yshift=-9.45cm]current page.north east);
+  \node[anchor=north west,inner sep=0] at ([xshift=2.5cm,yshift=-2.4cm]current page.north west)
+    {\includegraphics[width=2.6cm]{icon.png}};
+  \node[anchor=north west,text=white,font=\sffamily\bfseries\fontsize{54}{58}\selectfont]
+    at ([xshift=5.6cm,yshift=-2.25cm]current page.north west) {Funis};
+  \node[anchor=north west,text=white,font=\sffamily\fontsize{22}{26}\selectfont]
+    at ([xshift=5.65cm,yshift=-4.25cm]current page.north west) {User Manual};
+  \node[anchor=north west,text=white!80!ink,font=\sffamily\large,text width=13.5cm,align=left]
+    at ([xshift=2.5cm,yshift=-6.4cm]current page.north west)
+    {Equilibrium and form-finding of spatial compression paths:\\
+     the analytical Linear Arch Static Analysis (LASA), plane funiculars\\
+     and the thrust line assessment of arches};
+  \node[anchor=north,inner sep=0] at ([yshift=-10.6cm]current page.north)
+    {\shot[15.6cm]{window_overview.png}};
+  \node[anchor=south west,font=\sffamily,text=ink,text width=16cm,align=left]
+    at ([xshift=2.5cm,yshift=2.3cm]current page.south west)
+    {{\Large\bfseries Version \FunisVersion}\\[3pt]
+     {\color{muted}\ManualDate}\\[12pt]
+     {\large \FunisAuthor}\\[2pt]
+     {\small\color{muted}\FunisAffiliation}\\[8pt]
+     {\small\color{muted}DOI \href{https://doi.org/\FunisDOI}{\FunisDOI}\quad\textbullet\quad
+      \href{\FunisRepository}{\nolinkurl{\FunisRepository}}}};
+\end{tikzpicture}
+\end{titlepage}
+
+% ----------------------------------------------------------------- imprint
+\thispagestyle{empty}
+\vspace*{\fill}
+{\small\sloppy
+\noindent\textsf{\bfseries\color{ink} Funis \FunisVersion{} User Manual}\\
+\ManualDate
+
+\medskip
+\noindent This manual describes version \FunisVersion{} of Funis, the desktop application for Windows and macOS
+of the analytical Linear Arch Static Analysis of spatial compression paths, with the plane funicular and
+the thrust line assessment of masonry arches. It is rebuilt for every release of the program, and the
+edition matching each version is kept in the repository as \file{docs/Funis\_User\_Manual.pdf}.
+
+\medskip
+\noindent\textsf{\bfseries\color{ink} Author.} \FunisAuthor, \FunisAffiliation.
+ORCID \href{\FunisORCID}{\nolinkurl{\FunisORCID}}.
+
+\noindent\textsf{\bfseries\color{ink} Repository.} \url{\FunisRepository}
+
+\noindent\textsf{\bfseries\color{ink} Archive.} Every release is archived on Zenodo. The concept DOI
+\href{https://doi.org/\FunisDOI}{\FunisDOI} refers to all versions and resolves to the latest one.
+
+\noindent\textsf{\bfseries\color{ink} How to cite.} \FunisAuthor, \emph{Funis: equilibrium and
+form-finding of spatial compression paths}, version \FunisVersion, software,
+\href{https://doi.org/\FunisDOI}{doi:\FunisDOI}. The file \file{CITATION.cff} of the repository gives the
+same data in machine-readable form.
+
+\medskip
+\noindent\textsf{\bfseries\color{ink} Licence.} Copyright \textcopyright{} 2026 \FunisAuthor. Funis is
+released under the MIT License, given in the file \file{LICENSE} of the repository. This manual is part
+of the repository and is distributed under the same licence. The installers also contain third-party
+libraries under their own licences, among them Qt for Python (PySide6, LGPL-3.0), NumPy, SciPy and
+Matplotlib.
+
+\medskip
+\noindent\textsf{\bfseries\color{ink} Disclaimer.} The software is provided ``as is'', without warranty
+of any kind, as stated in the licence. Funis computes equilibrium states under the hypotheses described
+in this manual. Whether those hypotheses represent a given structure, and every decision taken on the
+basis of the results, remain the responsibility of the user.
+}
+\clearpage
+
+\pdfbookmark[0]{Contents}{toc}
+\setcounter{tocdepth}{1}
+\tableofcontents
+
+% =================================================================
+\chapter{Introduction}\label{ch:intro}
+
+\section{What Funis does}
+
+Funis computes the equilibrium of continuous compression paths, that is, of lines that carry their loads
+by an axial force alone. In space it follows the analytical Linear Arch Static Analysis (LASA) of
+C.~Olivieri~\cite{article}: a path is either prescribed, and the program finds the axial force and the
+lateral reactions that keep it in equilibrium, or unknown, and the program finds the curve from the
+loads and the force at its start. In the vertical plane it draws the funicular line of given loads, the
+catenary and the parabola among them, and assesses masonry arches of finite thickness by their thrust
+lines.
+
+The program is a desktop application for Windows and macOS. It needs no other software: the installers
+contain everything, Python included. A model is entered in a panel of input sections, solved in a
+fraction of a second, and read in a summary, in drawings to scale, in graphs along the line, in contact
+diagrams, in a rotatable spatial view and in tables. Every drawing and table can be exported, and a
+self-contained HTML report collects the whole analysis.
+
+\section{The six tasks}
+
+Table~\ref{tab:tasks} lists the tasks. The first four act on spatial paths and follow the article. The
+last two act in the vertical plane.
+
+\begin{table}[ht]
+\caption{Tasks of Funis.}\label{tab:tasks}
+\small
+\begin{tabularx}{\linewidth}{@{}>{\sffamily\color{ink}\raggedright\arraybackslash}p{0.27\linewidth}X>{\raggedleft\arraybackslash}p{0.08\linewidth}@{}}
+\toprule
+\normalfont\bfseries Task & \bfseries Question answered & \bfseries Chapter\\ \midrule
+Supported path (assessment) & A path of given shape leans on a lateral support, such as the wall of a
+stair well. Which axial force and which reactions keep it in equilibrium, and can the support supply
+them within a friction cone? & \ref{ch:supported}\\
+Path without reactions & Is a path of given shape an axial equilibrium of given loads with no reaction
+at all, and which loads would make it one? & \ref{ch:free}\\
+Unknown geometry (form-finding) & Which curve carries given loads in pure compression from a given start
+point and initial force, or between two given supports? & \ref{ch:form}\\
+Node under a concentrated force & How does a concentrated force change the force and the direction of
+the line at a node? & \ref{ch:node}\\
+Plane funicular (catenary) & Which plane line carries given vertical and horizontal loads in compression
+between two supports? & \ref{ch:funicular}\\
+Arch assessment (thrust line) & Does a thrust line fit within a masonry arch, which thrusts are
+admissible, and how far is the arch from collapse? & \ref{ch:arch}\\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\section{Scope and relation to the article}
+
+The equations of the spatial tasks are those of the article~\cite{article}, and the cases of the article
+are available in the \menu{Examples} menu, where figure and section numbers refer to it. The plane
+funicular and the thrust line assessment of arches are tasks of the application. They rest on classical
+statics of plane funiculars and on Heyman's safe theorem for masonry arches~\cite{heyman1966,heyman1969},
+and they are not results of the article. Chapter~\ref{ch:limits} lists the hypotheses of every task.
+
+\section{About this manual}
+
+Chapters~\ref{ch:install} to~\ref{ch:conventions} cover installation, the interface and the conventions
+common to every task. Chapters~\ref{ch:supported} to~\ref{ch:arch} describe the tasks one by one: the
+input sections with their fields, the method, the results and a worked example taken from the
+\menu{Examples} menu. Chapters~\ref{ch:checks} to~\ref{ch:limits} cover the checks of every result, the
+exports, the catalogue of examples, the messages of the program and the limitations.
+Appendix~\ref{app:quick} collects the keyboard shortcuts, the command line and the notation.
+
+Interface elements are set in a sans-serif face: menu commands as \menu{File › Export › Report
+(HTML)…}, fields and buttons as \ui{Preload T = −S(0)}, keys as \kbd{F5}. File names are set as
+\file{project.funis}. The screenshots were taken on macOS. On Windows the window has the same layout,
+with the fonts of the system.
+
+The values printed in the worked examples and the screenshots are produced by the program itself when
+this manual is built, so they are those that version~\FunisVersion{} gives.
+
+% =================================================================
+\chapter{Installation}\label{ch:install}
+
+\section{Requirements}
+
+The installers of every release are published on the release page of the repository,
+\url{\FunisRepository/releases/latest}:
+\begin{itemize}
+\item \file{Funis-<version>-Windows-Setup.exe} for 64-bit Windows 10 or 11,
+\item \file{Funis-<version>-macOS-arm64.pkg} and \file{Funis-<version>-macOS-arm64.dmg} for Macs with
+Apple silicon.
+\end{itemize}
+On any other system, including Macs with an Intel processor and Linux, Funis runs from its source code
+with Python~3.9 or later (Section~\ref{sec:source}). No licence key, account or network connection is
+needed.
+
+\section{Windows}
+
+\begin{enumerate}
+\item Download \file{Funis-<version>-Windows-Setup.exe} and run it.
+\item The installer is not signed, so Windows SmartScreen may show the message \emph{Windows protected
+your PC}. Choose \ui{More info} and then \ui{Run anyway}.
+\item Follow the wizard. Funis is installed in \file{Program Files\textbackslash Funis}, with an entry
+in the Start menu, an optional icon on the desktop and the association of the \file{.funis} files, so
+that a double click on a project opens it in Funis.
+\end{enumerate}
+To uninstall Funis use \ui{Uninstall Funis} in the Start menu, or \ui{Settings › Apps}.
+
+\section{macOS}
+
+\begin{enumerate}
+\item Download \file{Funis-<version>-macOS-arm64.pkg} and open it. The installer copies
+\file{Funis.app} into \file{Applications}. Alternatively, open the \file{.dmg} file and drag
+\file{Funis.app} into \file{Applications}.
+\item The application is not notarised. At the first launch, macOS may refuse to open it. Open it with a
+right click on \file{Funis.app} and \ui{Open}, or allow it in \ui{System Settings › Privacy \&
+Security} with \ui{Open Anyway}. Later launches need no confirmation.
+\end{enumerate}
+To uninstall Funis move \file{Funis.app} from \file{Applications} to the Bin. On macOS, open project
+files with \menu{File › Open…}.
+
+\section{Running from the source code}\label{sec:source}
+
+With Python~3.9 or later, in the folder of the repository:
+\begin{verbatim}
+python3 -m venv .venv
+.venv/bin/python -m pip install -r requirements.txt
+.venv/bin/python run_funis.py          # or: .venv/bin/python -m funis
+\end{verbatim}
+On Windows use \file{.venv\textbackslash Scripts\textbackslash python} instead of
+\file{.venv/bin/python}. The dependencies are NumPy, SciPy, Matplotlib, PySide6, openpyxl, ezdxf and
+Pillow. The test suite of the repository runs with
+\begin{verbatim}
+.venv/bin/python -m pip install pytest
+.venv/bin/python -m pytest -q
+\end{verbatim}
+
+\section{Checking an installation}\label{sec:selftest}
+
+The option \file{-{}-selftest} opens the window without showing it, solves every example and exits with
+code~0 when all of them solve:
+\begin{verbatim}
+"C:\Program Files\Funis\Funis.exe" --selftest C:\Temp\funis.png      (Windows)
+/Applications/Funis.app/Contents/MacOS/Funis --selftest ~/funis.png    (macOS)
+\end{verbatim}
+The optional image receives a screenshot of the window, and a report with the same name and the
+extension \file{.log} is written next to it, for instance \emph{selftest: \NumberOfExamples{} examples,
+0 failures}. The build scripts of the installers run the same test on the packaged program.
+
+\section{Settings}
+
+Funis remembers the size and position of the window, the state of \menu{Run automatically} and the last
+folder used in a file dialog. They are stored with the user's preferences by Qt and contain no project
+data.
+
+% =================================================================
+\chapter{Getting started}\label{ch:start}
+
+\section{The main window}
+
+At start, Funis opens the circular benchmark of the article (Figs.~11 and~12) and solves it.
+Fig.~\ref{fig:window} shows the window. The \ui{Model} panel on the left holds the input, the results
+fill the rest of the window, and every change of the input is solved again after a short pause.
+
+\begin{figure}[ht]
+\centering
+\makebox[\linewidth]{%
+\begin{tikzpicture}
+  \node[anchor=south west,inner sep=0] (img) at (0,0) {\shot[\linewidth]{window_overview.png}};
+  \begin{scope}[x={(img.south east)},y={(img.north west)}]
+    \input{build/generated/callouts.tex}
+  \end{scope}
+\end{tikzpicture}}
+\caption{The main window with the circular benchmark of the article, tab \ui{Views}.}\label{fig:window}
+\end{figure}
+
+\begin{description}[leftmargin=0pt,labelsep=0.5em]
+\item[\badge{1} Menu bar.] \menu{File} (projects, examples, exports), \menu{Analysis} (run) and
+\menu{Help} (user guide, about).
+\item[\badge{2} Tool bar.] The most frequent commands: \ui{New project}, \ui{Open…}, \ui{Save},
+\ui{Examples}, \ui{Run}, \ui{Run automatically}, \ui{Export} and \ui{User guide}.
+\item[\badge{3} Problem.] The name of the project and the \ui{Task}. The task decides which input
+sections appear below.
+\item[\badge{4} Input sections.] The data of the task, in sections that scroll vertically: geometry,
+loads, point actions, support, contact, output and so on (Section~\ref{sec:panel}).
+\item[\badge{5} Result tabs.] \ui{Summary}, \ui{Views}, \ui{Graphs}, \ui{Contact} (\ui{Admissible
+thrusts} for an arch), \ui{Spatial view} and \ui{Tables}. A tab without content for the task is
+disabled.
+\item[\badge{6} Selector.] \ui{All diagrams} of the tab, or one of them enlarged.
+\item[\badge{7} Navigation.] The Matplotlib tool bar of the drawing: reset, back, forward, pan, zoom,
+margins, axis options and save.
+\item[\badge{8} Drawings.] Views to scale, with the labels placed clear of the lines and of each other.
+\item[\badge{9} Notes.] The scales of the arrows and the meaning of dashed lines in the current
+drawings.
+\item[\badge{10} Status bar.] The outcome of the last run, for instance \emph{Supported path
+(assessment) solved, 1 warning}, the messages of the exports and the version of the program.
+\end{description}
+
+\section{A first analysis}\label{sec:first}
+
+The following steps use the benchmark that opens at start. They take a few minutes and touch every
+part of the interface.
+
+\begin{enumerate}
+\item \textbf{Read the summary.} Open the \ui{Summary} tab. The thrust $S$ grows from $-8$~kN at the
+start to about $-33$~kN at the end, the line is in compression everywhere, and the contact margin is
+positive: the wall can supply the required reactions with the friction coefficient $\mu=0.6$.
+\item \textbf{Change a load.} In \ui{Distributed loads}, raise the coefficient $a_0$ of the horizontal
+load $h$ from 2 to 4 kN/m. After a short pause the analysis runs again. The summary now shows a warning
+in colour: the required reaction leaves the contact cone. The line is still in compression, but the
+assumed wall cannot supply the reaction (Section~\ref{sec:contact}).
+\item \textbf{Find the admissible preloads.} The summary line \ui{Admissible preloads at λ = 1} gives
+the interval of the preload $T$ for which the contact cone is satisfied with the new load, if any. Open
+the \ui{Contact} tab and select \ui{Admissible preload and load multiplier} in the selector: the shaded
+region contains every admissible pair $(T,\lambda)$, and the marker shows the model.
+\item \textbf{Look at the line in space.} Open \ui{Spatial view} and drag the drawing to rotate it.
+\item \textbf{Export a report.} Choose \menu{File › Export › Report (HTML)…}, and open the file in a web
+browser. It holds the summary, every drawing, every table and the input.
+\item \textbf{Save the project.} Choose \menu{File › Save} (\kbd{Ctrl+S}, \kbd{⌘S} on macOS). The project
+is written as a \file{.funis} file that \menu{File › Open…} reads back.
+\end{enumerate}
+
+\section{Projects}
+
+A project holds the whole input of a task: its name, the task and the data of every section. It does not
+hold results, which are computed again when the project is opened.
+
+\begin{description}[leftmargin=0pt,labelsep=0.5em]
+\item[New project] (\kbd{Ctrl+N}) clears the input to the defaults of the program.
+\item[Open…] (\kbd{Ctrl+O}) reads a \file{.funis} file, or a \file{.json} file with the same content.
+\item[Save] (\kbd{Ctrl+S}) and \textsf{\bfseries\color{ink}Save as…} (\kbd{Ctrl+Shift+S}) write the
+project. The title bar shows the file name, with an asterisk when there are unsaved changes.
+\item[Examples] load one of the \NumberOfExamples{} examples of Chapter~\ref{ch:examples}. An example
+is an ordinary project: modify it and save it under a new name.
+\end{description}
+Before a command replaces a project with unsaved changes, and before the window closes, Funis asks
+whether to discard them. On macOS the shortcuts use \kbd{⌘} in place of \kbd{Ctrl}.
+
+% =================================================================
+\chapter{Working with the interface}\label{ch:interface}
+
+\section{Menus and tool bar}
+
+\begin{table}[ht]
+\caption{Commands of the menus. The tool bar repeats the most frequent ones.}\label{tab:menus}
+\small
+\begin{tabularx}{\linewidth}{@{}>{\sffamily\color{ink}\raggedright\arraybackslash}p{0.34\linewidth}>{\raggedright\arraybackslash}p{0.17\linewidth}X@{}}
+\toprule
+\normalfont\bfseries Command & \bfseries Shortcut & \bfseries Action\\ \midrule
+File › New project & Ctrl+N & Clear the input to the defaults.\\
+File › Open… & Ctrl+O & Open a project (\file{.funis} or \file{.json}).\\
+File › Examples & & Load an example (Chapter~\ref{ch:examples}).\\
+File › Save & Ctrl+S & Save the project.\\
+File › Save as… & Ctrl+Shift+S & Save the project under a new name.\\
+File › Export › Drawings (PDF, SVG, PNG)… & & Write the selected drawings (Section~\ref{sec:exdrawings}).\\
+File › Export › Drawings as DXF… & & Write the views to scale and the spatial path to one DXF file.\\
+File › Export › Tables as CSV… & & Write every table to one CSV file.\\
+File › Export › Tables as Excel… & & Write every table to a sheet of one workbook.\\
+File › Export › Results as JSON… & & Write the input, the summary, the tables and the messages.\\
+File › Export › Report (HTML)… & & Write a self-contained report.\\
+File › Quit & Alt+F4 & Close Funis (Alt+F4 is the window command of Windows).\\
+Analysis › Run & F5 & Solve the model now.\\
+Analysis › Run automatically & & Solve the model after every change (on by default).\\
+Help › User guide & F1 & The short guide of the program, with the equations of every task.\\
+Help › About Funis & & Version, licence and reference.\\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+The shortcuts are those of Windows. On macOS \kbd{⌘} replaces \kbd{Ctrl}, \kbd{⌘?} opens the user
+guide, and \menu{Quit} (\kbd{⌘Q}) is in the application menu (Section~\ref{app:keys}). The \ui{Examples} and \ui{Export} buttons of the tool bar open the same lists as the
+menus.
+
+\section{The Model panel}\label{sec:panel}
+
+The panel opens with the \ui{Problem} box (Fig.~\ref{fig:problem}): a free \ui{Name}, printed as the
+title of the summary and of the report, and the \ui{Task}. Below it, the sections of the task appear in
+a fixed order (Table~\ref{tab:sections}), and the panel scrolls when they do not fit. The panel can be
+detached from the window with the button at its top right and docked again by a double click on its
+title.
+
+\begin{figure}[H]
+\centering\shot[0.6\linewidth]{section_problem.png}
+\caption{The Problem box.}\label{fig:problem}
+\end{figure}
+
+\begin{table}[ht]
+\caption{Input sections of every task, in the order of the panel.}\label{tab:sections}
+\small
+\begin{tabularx}{\linewidth}{@{}>{\sffamily\color{ink}\raggedright\arraybackslash}p{0.30\linewidth}X@{}}
+\toprule
+\normalfont\bfseries Task & \bfseries Sections\\ \midrule
+Supported path (assessment) & Geometry of the path, Distributed loads, Point actions, Support of the
+line, Contact with the wall, Output\\
+Path without reactions & Geometry of the path, Path without reactions, Distributed loads and Point
+actions (only to check given loads), Output\\
+Unknown geometry (form-finding) & Free curve, Distributed loads, Point actions, Output\\
+Node under a concentrated force & Node\\
+Plane funicular (catenary) & Plane funicular, Loads on the line, Point loads, Output\\
+Arch assessment (thrust line) & Arch, Fill and surcharge, Thrust line assessment, Point loads, Output\\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\section{Entering values}
+
+\begin{description}[leftmargin=0pt,labelsep=0.5em]
+\item[Numbers.] A numeric field shows its unit after the value. Type the value, or use the arrows and the
+mouse wheel. Lengths are in metres, forces in kilonewtons, angles in degrees.
+\item[Choices.] A drop-down list selects a variant, for instance the generator of the geometry or the
+kind of horizontal load. The fields that the variant does not use are disabled or hidden.
+\item[Polynomials.] A load or a thrust given as a polynomial has the four coefficients $a_0$ to $a_3$ of
+$a_0+a_1s+a_2s^2+a_3s^3$, with $s$ in metres. A constant is entered in $a_0$ alone.
+\item[Vectors.] A vector has one field per component, for instance $C_1$, $C_2$, $C_3$ of an initial
+force.
+\item[Tables.] Points, load tables and point actions are entered in tables. \ui{Add row} appends a copy
+of the last row, \ui{Remove} deletes the selected rows (or the last one), and \ui{Fill column} copies
+the value of the selected cell to its whole column. A cell accepts a decimal point or a decimal comma. A
+cell that is not a number stops the run with a message naming its row and column. A table of loads is
+interpolated linearly between its rows and held constant beyond its ends.
+\end{description}
+
+\section{Running the analysis}
+
+With \menu{Analysis › Run automatically} on, every change is solved 0.35~s after the last keystroke, so
+the results follow the input while it is typed. With the option off, or for a large number of samples,
+press \kbd{F5} or \ui{Run}. The status bar reports the outcome:
+\begin{itemize}
+\item \emph{<task> solved}, possibly with the number of warnings, which the \ui{Summary} tab lists in
+colour above the results,
+\item \emph{Input error}, when a field cannot be read, or \emph{The task could not be solved}, with the
+reason, when the data do not admit a solution of the task. The \ui{Summary} tab shows the message
+(Chapter~\ref{ch:messages}).
+\end{itemize}
+
+\section{Reading the results}
+
+\begin{description}[leftmargin=0pt,labelsep=0.5em]
+\item[Summary.] The name, the task, the notes of an example, the warnings and a table of the main
+results (Fig.~\ref{fig:summary}). The values can be selected and copied.
+\item[Views.] Plans, elevations and other drawings to scale. Distributed loads and reactions are drawn
+as arrows at the scale given in the notes below the drawing.
+\item[Graphs.] Quantities along the line: forces, reactions, loads, residuals, curvature and torsion, the
+eccentricity of an arch.
+\item[Contact.] For a supported path with the contact check on: the contact margin, the contact cone,
+the admissible region of preload and load multiplier, the admissible horizontal loads and the minimum
+preload. For an arch the tab is named \ui{Admissible thrusts} and shows the range of the thrust against
+the multiplier of the variable loads.
+\item[Spatial view.] The line in space with its loads and reactions. Drag to rotate, drag with the right
+button to zoom.
+\item[Tables.] The values at evenly spaced stations, the balance checks, the summary and the tables of
+the task (point actions, endpoint correction, joints, eccentricities, hinges, loads).
+\end{description}
+
+\begin{figure}[ht]
+\centering\shot[0.86\linewidth]{results_summary.png}
+\caption{The \ui{Summary} tab of the benchmark.}\label{fig:summary}
+\end{figure}
+
+In \ui{Views}, \ui{Graphs} and \ui{Contact}, the selector \ui{Show} displays \ui{All diagrams} of the tab
+in a grid, or one of them enlarged. The tool bar at the right of the selector is that of Matplotlib:
+\ui{Home} restores the full view, the arrows step through previous views, the cross pans, the magnifier
+zooms to a rectangle, and the disk saves the visible figure as an image. Labels are placed again at
+every redraw, clear of the lines, arrows and other labels, so they stay readable at any size of the
+window.
+
+\begin{figure}[p]
+\centering
+\shot[0.86\linewidth]{results_graphs.png}\\[8pt]
+\shot[0.86\linewidth]{results_tables.png}
+\caption{The \ui{Graphs} tab (top) and the \ui{Tables} tab (bottom) of the benchmark.}\label{fig:graphs}
+\end{figure}
+
+% =================================================================
+\chapter{Conventions of the model}\label{ch:conventions}
+
+\section{Units and signs}
+
+\begin{itemize}
+\item Lengths in metres, forces in kilonewtons, angles in degrees in the input and in radians in the
+tables where the column says so. Unit weights in kN/m³, surcharges in kN/m².
+\item Load densities in kN per metre of \emph{projected} length $s$, unless the input states another
+measure (Section~\ref{sec:measure}).
+\item The axes $\e_1$, $\e_2$ are horizontal and $\e_3$ points upward. A downward load has $p_3<0$.
+\item Tension is positive. A compressed line has $S\le0$ and $N\le0$. In the plane tasks the thrust
+$H=-F_1$ is positive in compression.
+\item Reactions are forces applied \emph{to the line} by its supports.
+\end{itemize}
+
+\section{Geometry of a spatial path}
+
+A spatial path is described by its projected arc length $s$, the length of its plan:
+\begin{equation}
+\x^*(s)=\x(s)+f(s)\,\e_3,\qquad \tv=\x_{,s},\qquad \nv=\e_3\times\tv,\qquad \tv_{,s}=\rho\,\nv,
+\end{equation}
+where $\x(s)$ is the plan, $f(s)$ the elevation, $\tv$ the projected unit tangent, $\nv$ its left normal
+and $\rho$ the projected curvature. The grade is $f_{,s}$, and $J=\sqrt{1+f_{,s}^2}$ converts projected
+length into actual length. The path runs in the direction of increasing $s$: its start is $s=0$ and its
+end $s=L$.
+
+\section{Forces}
+
+The force on the positive cut of the line is
+\begin{equation}
+\F=S\,\uv=N\,\T,\qquad \uv=\tv+f_{,s}\,\e_3,\qquad S=\F\cdot\tv,\qquad N=S\,J,
+\end{equation}
+where $S$ is the thrust (the horizontal projection of the force along the plan tangent), $N$ the axial
+force and $\T=\uv/J$ the unit tangent of the spatial path. The vertical component $V=F_3$ appears in the
+tables of the supported path. Every local result satisfies the balance $\F_{,s}+\pp+\rr=\mathbf 0$, with
+$\pp$ the load and $\rr$ the reaction per projected metre.
+
+\section{Load measures}\label{sec:measure}
+
+The vertical load is $p_3=-w$, where $w$ can be given:
+\begin{itemize}
+\item per projected metre, as a polynomial or a table in $s$, the measure of the article,
+\item per metre of actual length, as a polynomial, which suits a self-weight. Then $p_3=-wJ$ per
+projected metre.
+\end{itemize}
+The horizontal load can be absent, a profile $h(s)$ in a fixed direction $\beta$ measured from $\e_1$
+toward $\e_2$ (a polynomial or a table), pseudo-static, $h=\gamma\,|p_3|$ along $\beta$, or given by two
+polynomial components $p_1(s)$, $p_2(s)$. The multiplier $\lambda$ scales the horizontal load, so that
+$\lambda=0$ removes it without changing its data. In the plane tasks the loads are per metre of the
+horizontal abscissa $x$, except a weight per metre of actual length (Chapter~\ref{ch:funicular}).
+
+\section{Point actions}
+
+A point action is a concentrated force $\G=(G_1,G_2,G_3)$ at the abscissa $s$. The program adds a node
+to the samples there, and every quantity has a value before and after the node. In the tables of
+stations the node takes two rows. On a supported path a point action takes a horizontal point reaction,
+and on a free curve the force jumps by $-\G$.
+
+\section{Resolution}
+
+The number of \ui{Samples along s} (2001 by default, between 101 and 20\,001) fixes the resolution of
+the integrals along the line, computed by the Simpson rule. The \ui{Output} section
+(Fig.~\ref{fig:output}) sets the abscissa of the graphs, the angle $\theta$ when the path has one or the
+projected length $s$, and the number of \ui{Stations in the tables} (41 by default). The stations do not
+affect the solution, only the rows of the tables and of the exports.
+
+\begin{figure}[H]
+\centering\shot[0.6\linewidth]{section_output.png}
+\caption{The \ui{Output} section.}\label{fig:output}
+\end{figure}
+
+% =================================================================
+\chapter{Supported path (assessment)}\label{ch:supported}
+
+\section{Purpose}
+
+The geometry of the path is prescribed, for instance the line of thrust of a helical stair or of a ramp,
+and the path leans on a lateral support, such as the wall of the stair well, that supplies horizontal
+reactions only ($r_3=0$). A preload $T=-S(0)$, the compressive end thrust at the start, completes the
+data. The program finds the thrust, the axial force and the reactions that the support must supply, and
+checks whether a wall with friction can supply them.
+
+\section{Input}
+
+\subsection*{Geometry of the path}
+
+\begin{figure}[H]
+\centering
+\raisebox{-\height}{\shot[0.48\linewidth]{section_geometry.png}}\hfill
+\raisebox{-\height}{\shot[0.48\linewidth]{section_ellipse_geometry.png}}
+\caption{\ui{Geometry of the path}: circular helix (left) and elliptical helix (right).}\label{fig:geometry}
+\end{figure}
+
+\begin{fields}
+Generator & & Circular helix, elliptical helix or smooth path through points.\\
+Samples along s & & Resolution of the integrals along $s$.\\
+Radius R & m & Circular helix $(R\cos\theta,R\sin\theta,c(\theta-\theta_0))$, with $s=R(\theta-\theta_0)$
+and grade $c/R$.\\
+Pitch c (rise per radian) & m/rad & Negative for a path that descends as $\theta$ grows.\\
+Start angle θ₀, end angle θ₁ & ° & The angular extent of the path, with $\theta_1>\theta_0$.\\
+Semi-axis a, b & m & Elliptical plan $(a\cos\theta,b\sin\theta)$.\\
+Elevation & & $f=c(\theta-\theta_0)$, or $f=k_s s$ with a constant grade.\\
+c [m/rad] or k\textsubscript{s} [–] & & The rise per radian or the constant grade.\\
+Points x₁, x₂, x₃ & m & A cubic spline through the points, re-parametrized by the projected length. The plan
+must not stop or turn back.\\
+\end{fields}
+
+\begin{figure}[H]
+\centering\shot[0.6\linewidth]{section_points_geometry.png}
+\caption{\ui{Geometry of the path}: smooth path through points.}\label{fig:points}
+\end{figure}
+
+The supported path needs a non-zero grade everywhere, because the thrust follows from the vertical
+balance divided by the grade.
+
+\subsection*{Distributed loads}
+
+\begin{figure}[H]
+\centering\shot[0.6\linewidth]{section_loads.png}
+\caption{\ui{Distributed loads (per metre of projected length)}.}\label{fig:loads}
+\end{figure}
+
+\begin{fields}
+Vertical load p₃ = −w & & $w(s)$ per projected metre, $w(s)$ per metre of actual length, or a table of
+$w(s)$ per projected metre.\\
+w = a₀ + a₁ s + a₂ s² + a₃ s³ & kN/m & Coefficients of $w$ (or the table \ui{s}, \ui{w}).\\
+Horizontal load & & None, $h(s)$ in a fixed direction $\beta$, a table of $h(s)$, pseudo-static
+$h=\gamma|p_3|$ along $\beta$, or the components $p_1(s)$, $p_2(s)$.\\
+h = a₀ + … & kN/m & Coefficients of $h$.\\
+Direction β & ° & Direction of the horizontal load, from $\e_1$ toward $\e_2$.\\
+Coefficient γ & – & Ratio of the pseudo-static horizontal load to the vertical load.\\
+p₁, p₂ = a₀ + … & kN/m & Components of the horizontal load.\\
+Multiplier λ & – & Factor on the horizontal load.\\
+\end{fields}
+
+\subsection*{Point actions}
+
+\begin{figure}[H]
+\centering\shot[0.6\linewidth]{section_actions_points.png}
+\caption{\ui{Point actions} with one concentrated force.}\label{fig:actions}
+\end{figure}
+
+Each row gives the abscissa \ui{s} and the components \ui{G₁}, \ui{G₂}, \ui{G₃} in kN of a concentrated
+force.
+
+\subsection*{Support of the line and contact with the wall}
+
+\begin{figure}[H]
+\centering
+\raisebox{-\height}{\shot[0.48\linewidth]{section_support.png}}\hfill
+\raisebox{-\height}{\shot[0.48\linewidth]{section_contact.png}}
+\caption{\ui{Support of the line} (left) and \ui{Contact with the wall} (right).}\label{fig:support}
+\end{figure}
+
+\begin{fields}
+Preload T = −S(0) & kN & Compressive end thrust supplied at the start of the path.\\
+Wall & & On the right or on the left of the direction of travel.\\
+Check the contact cone & & Switches on the contact check and the \ui{Contact} tab.\\
+Friction coefficient μ & – & Friction between the line and the wall.\\
+Width of the centred strip L\textsubscript{sw} & m & Width of the strip of contact.\\
+Distance of the wall δ & m & Distance of the strip from the wall. 0 removes the strip limit.\\
+Largest T, largest λ of the diagrams & kN, – & Window of the diagram of admissible pairs $(T,\lambda)$.
+0 chooses it automatically.\\
+\end{fields}
+
+\section{Method}
+
+Vertical balance gives the vertical component of the force, $V=C_3-P_3(s)$, with $\C=\F(0)$ and $P_3$
+the primitive of the vertical loads. Hence
+\begin{equation}
+S=\frac{V}{f_{,s}},\qquad N=S\,J,\qquad
+r_t=-S_{,s}-\pp_h\cdot\tv,\qquad r_n=-\rho\,S-\pp_h\cdot\nv,
+\end{equation}
+where $r_t$ and $r_n$ are the tangential and normal components of the horizontal reaction and $\pp_h$
+the horizontal load. A horizontal load leaves the thrust unchanged and shifts the reaction by $-\pp_h$:
+the dashed arrows of the plan show the reaction of the vertical loads alone.
+
+A point action $\G$ at $s_j$, with no vertical support impulse, makes the thrust jump and requires a
+horizontal point reaction:
+\begin{equation}
+[S]=-\frac{G_3}{f_{,s}},\qquad \R_h=\frac{G_3}{f_{,s}}\,\tv-\G_h.
+\end{equation}
+
+\section{Contact with the wall}\label{sec:contact}
+
+The wall presses the line with the normal reaction $r_\nu=r_n$ for a wall on the right of the direction
+of travel and $r_\nu=-r_n$ for a wall on the left. The reaction is admissible when it lies in the
+contact cone
+\begin{equation}
+r_\nu\ge0,\qquad |r_t|\le\eta\,r_\nu,\qquad \eta=\min(\mu,\varphi),\qquad \varphi=\frac{L_{sw}}{2\delta},
+\end{equation}
+where $\varphi$ limits the tangential reaction that a centred strip of width $L_{sw}$ at the distance
+$\delta$ of the wall can carry. With $\delta=0$ the strip limit is removed. The contact margin
+$\min(r_\nu,\ \eta r_\nu-|r_t|)$ is non-negative exactly inside the cone.
+
+Every reaction is affine in the preload $T$ and in the load multiplier $\lambda$. The program therefore
+gives in closed form:
+\begin{itemize}
+\item the interval of admissible preloads at the given $\lambda$, and the side of the cone and the
+station that govern it,
+\item the interval of admissible multipliers at the given $T$, when there is a horizontal load,
+\item the convex region of admissible pairs $(T,\lambda)$,
+\item the admissible horizontal loads turned to every direction $\beta$ at the given preload,
+\item the minimum preload against the size of the horizontal load, along its direction and along the
+directions turned by 90° and 180°,
+\item for a descending circular helix with constant loads per projected metre, a wall on the right and no
+point actions, the exact minimum preload of Appendix~A of the article.
+\end{itemize}
+
+\begin{caution}
+A violated contact cone means that the assumed wall cannot supply the required reaction. It does not
+mean that the line loses compression, and the bounds on $T$ and $\lambda$ are not collapse loads.
+\end{caution}
+
+\section{Results}
+
+\begin{description}[leftmargin=0pt,labelsep=0.5em]
+\item[Summary.] Geometry, projected and actual length, drop, preload, ranges of $S$, $N$, $r_t$ and
+$r_n$, end forces, compression, wall, global balance and, with the contact check, the cone, the least
+margin, the admissible preloads and multipliers and the exact bound when it applies.
+\item[Views.] \ui{Plan with loads and reactions} and \ui{Developed elevation}.
+\item[Graphs.] \ui{Thrust and axial force} and \ui{Required reactions}.
+\item[Contact.] \ui{Contact margin}, \ui{Contact cone}, \ui{Admissible preload and load multiplier},
+\ui{Admissible horizontal loads at T = …} and \ui{Minimum preload along the load ray}.
+\item[Tables.] \ui{Stations} ($s$, $\theta$, position, grade, $S$, $N$, $V$, $r_t$, $r_n$, loads and
+margin), \ui{Point actions} (jump of $S$, point reaction and its cone margin), \ui{Balance} and
+\ui{Summary}.
+\end{description}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=0.485\linewidth]{sup_plan.pdf}\hfill\includegraphics[width=0.485\linewidth]{sup_cone.pdf}\\[4pt]
+\includegraphics[width=0.485\linewidth]{sup_region.pdf}\hfill\includegraphics[width=0.485\linewidth]{sup_domain.pdf}
+\caption{Drawings of the benchmark exported by Funis: plan with loads and reactions, contact cone,
+admissible pairs of preload and load multiplier, admissible horizontal loads at the given preload.}
+\label{fig:supdrawings}
+\end{figure}
+
+\section{Worked example: the circular benchmark}
+
+Load \menu{Examples › \NameBenchmark}. The path is a complete descending turn of a circular helix of
+radius 2~m and pitch $-1$~m/rad, under a vertical load of 1~kN per projected metre and a horizontal load
+of 2~kN/m along $\e_1$, with a preload of 8~kN and a wall on the right. The contact cone has $\mu=0.6$
+and a strip of 0.8~m at 0.5~m from the wall. The summary reads:
+
+\summarytable{\SummaryBenchmark}
+
+\medskip
+The contact margin is positive, so the wall can supply the reactions. The admissible preloads start
+at the exact bound of Appendix~A, and the horizontal load could grow by the factor printed as the upper
+admissible multiplier before the cone is violated. The example \menu{\NameViolated} doubles the
+horizontal load: the warning
+\begin{itemize}\small\MessagesViolated\end{itemize}
+appears above the summary, and Fig.~\ref{fig:violated} shows it.
+
+\begin{figure}[ht]
+\centering\shot[0.86\linewidth]{results_warning.png}
+\caption{A warning in the \ui{Summary} tab: the reaction leaves the contact cone.}\label{fig:violated}
+\end{figure}
+
+% =================================================================
+\chapter{Path without reactions}\label{ch:free}
+
+\section{Purpose}
+
+Without reactions the force along the line is $\F=\C-\Pv(s)$, with $\C$ the force at the start and
+$\Pv$ the primitive of the distributed loads and of the point forces. A prescribed path is an axial
+equilibrium only if $\F$ is parallel to $\uv$ everywhere. This task checks that condition for given
+loads, or finds the loads that satisfy it.
+
+\section{Input}
+
+The sections \ui{Geometry of the path} and \ui{Output} are those of Chapter~\ref{ch:supported}. The
+section \ui{Path without reactions} (Fig.~\ref{fig:rf}) selects the task, and \ui{Distributed loads}
+and \ui{Point actions} appear only to check given loads.
+
+\begin{figure}[H]
+\centering\shot[0.6\linewidth]{section_reaction_free.png}
+\caption{The section \ui{Path without reactions}.}\label{fig:rf}
+\end{figure}
+
+\begin{fields}
+Task & & Check the loads below, loads in a fixed vertical plane, or loads for a prescribed thrust
+$S(s)$.\\
+Conserved component B = F · m & kN & For loads in a fixed vertical plane.\\
+Plane direction β & ° & Direction $\dv(\beta)$ of the vertical plane of the loads.\\
+S = a₀ + a₁ s + … & kN & The prescribed thrust.\\
+\end{fields}
+
+\section{Method}
+
+\begin{description}[leftmargin=0pt,labelsep=0.5em]
+\item[Check the loads.] The program finds the initial force $\C$ that makes $\F=\C-\Pv$ closest to the
+tangent in the least-squares sense, and reports the largest transverse force $|\F-S\uv|$. A transverse
+force that is not small, compared with the force itself, disproves the equilibrium for every $\C$: a
+lateral support or a different geometry is needed.
+\item[Loads in a fixed vertical plane.] Loads in the plane spanned by $\e_3$ and $\dv(\beta)$ conserve
+the component $\F\cdot\mv=B$ along $\mv=\e_3\times\dv$, so that $S=B/(\tv\cdot\mv)$ and the compatible
+loads follow from $\pp=-\F_{,s}$. Compression needs $\tv\cdot\mv$ of opposite sign to $B$, which
+restricts the path to part of a half-turn.
+\item[Loads for a prescribed thrust.] The loads are $\pp=-(S\uv)_{,s}$, in general with three
+components.
+\end{description}
+
+\section{Results}
+
+The summary gives the verdict or the compatible loads, the ranges of $S$ and $N$, the compression and the
+global balance. The views are the plan with the horizontal loads and the developed elevation, and the
+graphs show the forces, the loads and, for a check, \ui{Transverse force of the best fit}. A part of the
+path in tension is reported with a warning.
+
+\section{Worked example}
+
+\menu{Examples › \NameNotAxial} perturbs the elevation of a funicular curve. The check finds:
+
+\summarytable{\SummaryNotAxial}
+
+\medskip
+\noindent with the warning
+\begin{itemize}\small\MessagesNotAxial\end{itemize}
+The example that follows it in the menu solves the same check on the funicular itself, which passes.
+
+\begin{figure}[ht]
+\centering\includegraphics[width=0.485\linewidth]{rf_residual.pdf}\hfill\includegraphics[width=0.485\linewidth]{rf_loads.pdf}
+\caption{Transverse force of the best fit for the perturbed path (left), and the compatible loads of
+the exceptional helical arc of Fig.~8 of the article (right).}\label{fig:rfdrawings}
+\end{figure}
+
+% =================================================================
+\chapter{Unknown geometry (form-finding)}\label{ch:form}
+
+\section{Purpose}
+
+The loads are given as functions of the projected length and the curve is unknown. Starting from a
+point and from the initial force, the program integrates the curve that carries the loads in pure
+compression. It can also find the initial force that takes the curve to a prescribed second support.
+
+\section{Input}
+
+\begin{figure}[H]
+\centering\shot[0.6\linewidth]{section_form.png}
+\caption{The section \ui{Free curve} with a prescribed second support.}\label{fig:form}
+\end{figure}
+
+\begin{fields}
+Projected length L & m & Length of the plan of the curve.\\
+Samples along s & & Resolution of the integration.\\
+Start x*(0) & m & The first support.\\
+Task & & Prescribed initial force, or prescribed second support.\\
+Initial force C & kN & $\C=\F(0)$, for a prescribed initial force.\\
+Second support x*(L) & m & The target, for a prescribed second support.\\
+Estimate of C & kN & Starting value of the correction, for a prescribed second support.\\
+\end{fields}
+The sections \ui{Distributed loads} and \ui{Point actions} are those of Chapter~\ref{ch:supported}.
+
+\section{Method}
+
+The force is $\F=\C-\Pv(s)$ and the curve follows by quadrature from
+\begin{equation}
+\x^*_{,s}=-\frac{\F}{Q},\qquad Q=|\F_h|>0,\qquad S=-Q,\qquad N=-|\F|,
+\end{equation}
+where $\F_h$ is the horizontal part of the force. With a weight per metre of actual length the force and
+the position are integrated together. With a prescribed second support, the initial force is corrected by
+a damped Newton iteration with the exact endpoint Jacobian (finite differences for a weight per actual
+length), starting from the estimate. Every iterate keeps $Q>0$.
+
+The graphs give the curvature and the torsion of the curve,
+\begin{equation}
+\kappa=\frac{Q\,|\F\times\pp|}{|\F|^3},\qquad
+\tau=-\frac{Q\,\F\cdot(\pp\times\pp_{,s})}{|\F\times\pp|^2}.
+\end{equation}
+
+\section{Results}
+
+The summary gives the end point, the end force, the length of the curve, the ranges of $S$ and $N$, the
+least horizontal force $Q$, the distance from the plane of $\C$ and $\pp(0)$ (zero for parallel loads)
+and, for constant loads, the difference from the closed form of Appendix~B of the article. With a
+prescribed second support it adds the target, the number of force updates with the final mismatch, and
+the eigenvalues of the plan block $\mathbf K$ of the endpoint Jacobian. The views are the plan and the
+developed elevation, with \ui{Elevations of the successive estimates} for a second support. The graphs
+show the forces, the curvature and torsion, the distance from the plane and the endpoint correction.
+
+\section{Worked example}
+
+\menu{Examples › \NameSecondSupport} prescribes the second support of case C of the article and starts
+from a deliberately wrong estimate:
+
+\summarytable{\SummarySecondSupport}
+
+\begin{figure}[ht]
+\centering\includegraphics[width=0.485\linewidth]{ff_plan.pdf}\hfill\includegraphics[width=0.485\linewidth]{ff_elevation.pdf}\\[4pt]
+\includegraphics[width=0.485\linewidth]{ff_iterates.pdf}\hfill\includegraphics[width=0.485\linewidth]{ff_newton.pdf}
+\caption{Form-finding: plan and developed elevation of case C (top), and the successive estimates and
+the endpoint mismatch of the correction for a prescribed second support (bottom).}\label{fig:ffdrawings}
+\end{figure}
+
+\begin{figure}[ht]
+\centering\shot[0.86\linewidth]{results_spatial.png}
+\caption{The \ui{Spatial view} of case C. Drag to rotate, drag with the right button to zoom.}
+\label{fig:spatial}
+\end{figure}
+
+% =================================================================
+\chapter{Node under a concentrated force}\label{ch:node}
+
+\section{Purpose and input}
+
+At a node where a concentrated force $\G$ and possibly a point reaction $\R$ act, the force of the line
+jumps. The task gives the force after the node and the change of direction of the line.
+
+\begin{figure}[H]
+\centering\shot[0.6\linewidth]{section_node.png}
+\caption{The section \ui{Node}.}\label{fig:node}
+\end{figure}
+
+\begin{fields}
+Force before the node F⁻ & kN & The force of the line before the node.\\
+Point force G & kN & The concentrated force.\\
+Point reaction R & kN & An optional point reaction.\\
+Length of the drawn members & m & Length of the members in the drawings.\\
+\end{fields}
+
+\section{Method and results}
+
+\begin{equation}
+\F^+=\F^--\G-\R,\qquad \T^\pm=-\frac{\F^\pm}{|\F^\pm|}.
+\end{equation}
+The summary gives $\F^+$, the axial forces $N^-$ and $N^+$, the tangents, the change of tangent in
+degrees and the closure of the force polygon. The views are the node in plan, in elevation on
+$x_1x_3$ and the force polygon, drawn in the plane of the forces. For \menu{Examples ›
+\NameNode}:
+
+\summarytable{\SummaryNode}
+
+\begin{figure}[ht]
+\centering\includegraphics[width=0.485\linewidth]{node_plan.pdf}\hfill\includegraphics[width=0.485\linewidth]{node_polygon.pdf}
+\caption{The node of Fig.~7 of the article in plan, and its force polygon.}\label{fig:nodedrawings}
+\end{figure}
+
+% =================================================================
+\chapter{Plane funicular}\label{ch:funicular}
+
+\section{Purpose}
+
+The line lies in the vertical plane of $\e_1$ and $\e_3$, between the supports $A=(0,0)$ and
+$B=(L,z_B)$, and is described by its height $z=f(x)$ over the horizontal abscissa $x$. The program finds
+the line that carries the loads in compression: the catenary under a weight per metre of actual length,
+the parabola under a load per metre of $x$, the funicular polygon of point loads, and their
+combinations with horizontal loads.
+
+\section{Input}
+
+\begin{figure}[H]
+\centering
+\raisebox{-\height}{\shot[0.48\linewidth]{section_funicular.png}}\hfill
+\raisebox{-\height}{\shot[0.48\linewidth]{section_plane_loads.png}}
+\caption{The sections \ui{Plane funicular} (left) and \ui{Loads on the line} (right).}\label{fig:pf}
+\end{figure}
+
+\begin{fields}
+Span L & m & Horizontal distance of the supports.\\
+Height z\textsubscript{B} of the second support & m & Height of $B$ above $A$.\\
+Samples along x & & Resolution of the integration.\\
+Line & & Through a point and the second support, with a prescribed thrust and the second support, or from
+a prescribed initial force.\\
+Point (x\textsubscript{c}, z\textsubscript{c}) & m & A point of the line, with $0<x_c<L$.\\
+Thrust H\textsubscript{A} = −F₁(0) & kN & The thrust at $A$, positive in compression.\\
+Initial force F(0) & kN & The force at $A$. The line then ends where the loads take it.\\
+Vertical load p₃ = −w & kN/m & $w(x)$ per metre of actual length (catenary), per metre of $x$
+(parabola), or a table per metre of $x$.\\
+Horizontal load (along e₁) & kN/m & None, $p_1=h(x)$ per metre of $x$, or pseudo-static $p_1=\gamma w$
+in the measure of $w$.\\
+Point loads x, G₁, G₃ & m, kN & Concentrated forces on the line. $G_3<0$ acts downward.\\
+\end{fields}
+
+\section{Method}
+
+Without reactions the force is $\F=\C-\Pv(x)$, with $\Pv$ the primitive of the loads and of the point
+loads, and the line follows $f_{,x}=F_3/F_1$. Compression needs $F_1<0$ everywhere. The thrust is
+$H=-F_1$, the axial force $N=-|\F|$, and the reactions are $\R_A=-\F(0)$ and $\R_B=\F(L)$. A load per
+metre of actual length is multiplied by $J=|\F|/|F_1|$, and the force and the line are integrated
+together. A horizontal load makes the thrust vary along the line, and where $F_1$ would reach zero the
+line turns vertical and the program stops with a message. A point load makes the force jump by $-\G$ and
+the line has a corner there.
+
+Where a closed form exists the summary gives its largest distance from the integrated line: the parabola
+(constant $w$ per metre of $x$), the catenary (constant $w$ per metre of actual length), the logarithmic
+branch of Appendix~B of the article (constant $w$ and $h$ per metre of $x$) and the catenary with an
+inclined axis (constant $w$ per actual length with the pseudo-static load).
+
+\section{Results and worked example}
+
+The summary gives the loads, the selected line, the initial force, the thrusts and reactions at $A$ and
+$B$, the highest point, the length, the range of $N$, the height reached at $x=L$ against the target,
+the closed form when it applies and the global balance. For \menu{Examples › \NameCatenary}:
+
+\summarytable{\SummaryCatenary}
+
+\begin{figure}[ht]
+\centering\includegraphics[width=0.485\linewidth]{pf_funicular.pdf}\hfill\includegraphics[width=0.485\linewidth]{pf_polygon.pdf}
+\caption{A catenary under its weight and a pseudo-static horizontal action (left) and a funicular
+polygon of point loads (right), with the reactions.}\label{fig:pfdrawings}
+\end{figure}
+
+% =================================================================
+\chapter{Arch assessment (thrust line)}\label{ch:arch}
+
+\section{Purpose}
+
+The task assesses a masonry arch of finite thickness by its thrust lines, under the classical hypotheses
+of Heyman~\cite{heyman1966}: the masonry has no tensile strength, an unlimited compressive strength, and
+sliding between voussoirs does not occur unless a friction coefficient is given. By the safe theorem, if
+one thrust line lies within the arch under the given loads, the arch does not collapse under those
+loads.
+
+\section{Input}
+
+\begin{figure}[H]
+\centering
+\raisebox{-\height}{\shot[0.48\linewidth]{section_arch.png}}\hfill
+\raisebox{-\height}{\shot[0.48\linewidth]{section_fill.png}}
+\caption{The sections \ui{Arch} (left) and \ui{Fill and surcharge} (right).}\label{fig:archsec}
+\end{figure}
+
+\begin{fields}
+Shape of the centre line & & Circular (segmental or semicircular), pointed (two-centred), elliptical,
+parabolic, catenary, or through points $(x,z)$.\\
+Span L & m & Distance of the centres of the springings, at $(0,0)$ and $(L,0)$.\\
+Rise f & m & Rise of the centre line.\\
+Thickness at the crown t, at the springings & m & The thickness varies linearly along the centre line
+between them. The faces are offset from the centre line along its normal.\\
+Depth b & m & Depth normal to the plane, which multiplies every area.\\
+Unit weight of the masonry & kN/m³ & \\
+Fill above the extrados & & Switches on the fill.\\
+Level x₃ of the fill, unit weight & m, kN/m³ & The fill loads the extrados vertically, column by column,
+and has no strength of its own.\\
+Horizontal action also on the fill & & Applies the horizontal action to the weight of the fill too.\\
+Uniform surcharge q & kN/m² & Vertical load on the extrados.\\
+\end{fields}
+
+\begin{figure}[H]
+\centering\shot[0.6\linewidth]{section_assessment.png}
+\caption{The section \ui{Thrust line assessment}.}\label{fig:assessment}
+\end{figure}
+
+\begin{fields}
+Joints & & Normal to the centre line (voussoir joints) or vertical sections.\\
+Number of slices & & The arch is cut into slices by the joints. Each slice carries its weight at its
+centroid.\\
+Horizontal action λ & – & A fraction of the weights applied horizontally at the same centroids.\\
+Direction of the horizontal action & & Along $+\e_1$ or $-\e_1$.\\
+Collapse multiplier of & & The horizontal action, the point loads, or none.\\
+Friction coefficient & – & With $\mu>0$ every joint also needs $|V|\le\mu|N|$. With 0 sliding is
+excluded.\\
+Line in the tables & & Minimum thrust, maximum thrust, or the line through three points.\\
+e / t of the three points & – & Eccentricities at the springing $A$, at the crown and at the springing
+$B$, from $-1/2$ (intrados) to $1/2$ (extrados).\\
+Minimum thickness & & Computes the least thickness, with the weights recomputed.\\
+\end{fields}
+The section \ui{Point loads} gives concentrated forces $(x,G_1,G_3)$ on the extrados at the abscissa
+$x$.
+
+\section{Method}
+
+A thrust line is the line of the centres of pressure of the resultant forces on the joints. The force on
+joint $j$ is $\F_j=\C-\Pv_j$, with $\C$ the force at the springing $A$ and $\Pv_j$ the sum of the loads
+of the slices before the joint, and the moment follows in the same way, so that every line is fixed by
+three numbers. The line is admissible where its centre of pressure lies on every joint between the
+intrados and the extrados and the force compresses the joint. These conditions are linear in the three
+numbers, and the program solves them as linear programs:
+\begin{description}[leftmargin=0pt,labelsep=0.5em]
+\item[Minimum and maximum thrust.] The admissible lines with the least and the largest horizontal thrust
+$H_A$, with the joints where they touch a face.
+\item[Line through three points.] The line with the given eccentricities at $A$, at the crown and at
+$B$. It is reported even when it leaves the arch, with a warning.
+\item[Geometric safety factor.] The joints are shrunk about their centres until a line just fits, with
+the same loads. The factor is the actual thickness over the thickness of this reduced
+arch~\cite{heyman1969}. A factor below 1 means that no line lies within the arch.
+\item[Collapse multiplier.] The largest multiplier of the horizontal action or of the point loads for
+which an admissible line exists. The line touches the faces at the hinges of the mechanism. With four
+hinges and no friction limit, the summary checks the multiplier by the virtual work of the mechanism
+through them.
+\item[Minimum thickness.] The least factor on every thickness for which a line fits, with the weights
+recomputed for the thinner arch. For the semicircular arch under its own weight on normal joints this is
+the classical $t/R=0.1075$, with hinges near 54.5° from the crown.
+\item[Friction.] With a coefficient $\mu>0$ the conditions $|V|\le\mu|N|$ join the linear programs. With
+0 the summary gives the friction that the selected line needs.
+\end{description}
+
+\section{Results}
+
+\begin{description}[leftmargin=0pt,labelsep=0.5em]
+\item[Views.] \ui{Thrust lines in the arch}, \ui{Loads and reactions} of the selected line,
+\ui{Collapse} with the hinges of the mechanism, \ui{Geometric safety factor} with the reduced arch, and
+\ui{Arch of minimum thickness}.
+\item[Graphs.] \ui{Eccentricity of the centre of pressure} and \ui{Normal force at the joints}.
+\item[Admissible thrusts.] The range of $H_A$ of the lines in the arch against the multiplier of the
+variable loads. It closes at the collapse multiplier.
+\item[Tables.] \ui{Joints} (position, angle, length, forces, $e/t$, moment and centre of pressure of
+the selected line), \ui{Eccentricities}, \ui{Hinges}, \ui{Admissible thrusts}, \ui{Loads}, \ui{Balance}
+and \ui{Summary}.
+\end{description}
+
+\begin{figure}[ht]
+\centering\shot[0.86\linewidth]{results_arch.png}
+\caption{The \ui{Views} tab of a semicircular arch under a horizontal action.}\label{fig:archviews}
+\end{figure}
+
+\section{Worked examples}
+
+\menu{Examples › \NameArchHorizontal} computes the collapse multiplier of a horizontal action
+proportional to the weight of a semicircular arch with $t/R=0.15$:
+
+\summarytable{\SummaryArchHorizontal}
+
+\begin{figure}[ht]
+\centering\includegraphics[width=0.485\linewidth]{arch_collapse.pdf}\hfill\includegraphics[width=0.485\linewidth]{arch_domain.pdf}\\[4pt]
+\includegraphics[width=0.485\linewidth]{arch_gsf.pdf}\hfill\includegraphics[width=0.485\linewidth]{arch_thickness.pdf}
+\caption{Collapse mechanism under the horizontal action, admissible thrusts against the multiplier, the
+reduced arch of the geometric safety factor, and the semicircular arch of minimum thickness.}\label{fig:archdrawings}
+\end{figure}
+
+\menu{Examples › \NameArchThickness} finds the least thickness of the semicircular arch under its own
+weight:
+
+\summarytable{\SummaryArchThickness}
+
+% =================================================================
+\chapter{Checks of every result}\label{ch:checks}
+
+Every result carries independent checks in the \ui{Balance} table:
+\begin{itemize}
+\item the resultant force and moment of all actions on the line, end forces and point actions included,
+which vanish for an equilibrium,
+\item a finite-difference test of the local equations $\F_{,s}+\pp+\rr=\mathbf 0$.
+\end{itemize}
+The last line of the summary repeats the global balance. The values are normalised by the sum of the
+magnitudes of the actions. A value near the rounding error of the computation, $10^{-12}$ or below,
+confirms the computed state. A larger value either reflects the resolution, and then decreases when the
+samples are increased, or belongs to data that the program reports as admitting no equilibrium, such
+as a path that is not an axial equilibrium of its loads, whose best fit leaves a moment unbalanced. For
+an arch the balance is that of the selected line, with the reactions at the centres of pressure of the
+springings and the loads of all the slices.
+
+The test suite of the repository checks the solvers against the closed forms and against the values
+reported in the article, the minimum thickness of the semicircular arch against the classical value, the
+examples, the files and the exports, and the clearance of the labels of every drawing.
+
+% =================================================================
+\chapter{Exporting results}\label{ch:export}
+
+Every export needs a solved model. The commands are in \menu{File › Export} and in the \ui{Export}
+button of the tool bar.
+
+\section{Drawings}\label{sec:exdrawings}
+
+\menu{Drawings (PDF, SVG, PNG)…} opens the dialog of Fig.~\ref{fig:export}. Select the drawings, the
+format and the size:
+\begin{description}[leftmargin=0pt,labelsep=0.5em]
+\item[Fit to a width.] Every drawing fills the given width with its axes and grid.
+\item[Views to scale, without axes.] Plans, elevations and diagrams are drawn to scale, as in a plate,
+with a scale bar and the title: the \ui{Length scale} in cm/m applies to plans and elevations, the
+\ui{Force scale} in cm/kN to diagrams in kN or kN/m. Graphs along the line are always fitted to the
+width.
+\item[Resolution.] The dots per inch of a PNG image.
+\end{description}
+Each drawing is written as \file{<base>\_<diagram>.<format>}, where \file{<diagram>} is the key of
+Table~\ref{tab:keys}. The labels are placed for the size of the file, clear of the geometry.
+
+\begin{figure}[ht]
+\centering\shot[0.46\linewidth]{export_dialog.png}
+\caption{The dialog \ui{Export drawings}.}\label{fig:export}
+\end{figure}
+
+\begin{table}[ht]
+\caption{Keys of the drawings in the exported file names.}\label{tab:keys}
+\small
+\begin{tabularx}{\linewidth}{@{}>{\ttfamily}p{0.2\linewidth}X@{}}
+\toprule
+\normalfont\bfseries Key & \bfseries Drawing\\ \midrule
+plan, elevation & Plan with loads and reactions (or of the curve), developed elevation\\
+forces, reactions, loads & Thrust and axial force, required reactions, loads\\
+residual & Transverse force of the best fit (path without reactions)\\
+curvature, plane & Curvature and torsion, distance from the plane of $\C$ and $\pp(0)$\\
+newton, iterates & Endpoint correction, elevations of the successive estimates\\
+margin, cone, region & Contact margin, contact cone, admissible preload and load multiplier\\
+domain, preload & Admissible horizontal loads, minimum preload along the load ray\\
+node\_plan, node\_elevation, polygon & Node in plan and in elevation, force polygon\\
+funicular & Plane funicular\\
+arch\_lines, arch\_loads & Thrust lines in the arch, loads and reactions\\
+arch\_collapse, arch\_gsf, arch\_thickness & Collapse, geometric safety factor, arch of minimum
+thickness\\
+eccentricity, arch\_forces, thrust\_domain & Eccentricity, normal force at the joints, admissible
+thrusts\\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\section{DXF}
+
+\menu{Drawings as DXF…} writes one DXF file (AutoCAD 2010 format) with every view to scale, side by side
+from left to right, each with its title. Plans and elevations are in metres, one drawing unit per metre.
+Diagrams in kN or kN/m are drawn at 0.1 drawing units per unit. Every view has its own layers, named
+after the drawing and the role of the line (loads, reactions and so on), and the spatial path of a
+spatial task is written as a 3D polyline on the layer \file{spatial\_path}. Graphs of functions are not
+written.
+
+\section{Tables}
+
+\begin{description}[leftmargin=0pt,labelsep=0.5em]
+\item[CSV.] One file with every table, each introduced by its title and followed by its note, in UTF-8.
+\item[Excel.] One workbook with a sheet per table, the summary first, a styled header and frozen
+headings.
+\item[JSON.] The title, the input of the project, the summary, every table with its columns, rows and
+note, the messages and, for a spatial path, the coordinates of its nodes.
+\end{description}
+
+\section{Report}
+
+\menu{Report (HTML)…} writes one self-contained HTML file, with the images embedded: the name and task,
+the notes and warnings, the summary, every drawing, every table and the complete input. It opens in any
+web browser and can be printed to PDF from there.
+
+\section{Project files}
+
+A \file{.funis} file is a JSON text with the keys \file{application}, \file{version} (the version of
+Funis that saved it), \file{saved} (date and time) and \file{project} (the input). Fields missing from
+an older file take their default values and unknown fields are ignored, so a project saved by one
+version opens in the next. Being a text file, a project can be compared, versioned and generated by a
+script.
+
+% =================================================================
+\chapter{Examples}\label{ch:examples}
+
+The \menu{Examples} menu holds \NumberOfExamples{} projects (Table~\ref{tab:examples}): the cases of the
+article, with figure and section numbers referring to it, three reference cases of the application (a
+catenary, a parabolic arch and a free curve with a point force), and the plane cases, funiculars checked
+against their closed forms and arches of several shapes. The descriptions are the notes that each
+example shows in the \ui{Summary} tab.
+
+{\small
+\setlength{\LTpre}{4pt}
+\begin{longtable}{@{}>{\sffamily\color{ink}\raggedright\arraybackslash}p{0.31\linewidth}>{\raggedright\arraybackslash}p{0.65\linewidth}@{}}
+\caption{The examples, grouped as in the menu.}\label{tab:examples}\\
+\toprule
+\normalfont\bfseries Example & \bfseries Description\\ \midrule
+\endfirsthead
+\toprule
+\normalfont\bfseries Example & \bfseries Description\\ \midrule
+\endhead
+\bottomrule
+\endfoot
+\ExamplesRows
+\end{longtable}}
+
+% =================================================================
+\chapter{Messages and troubleshooting}\label{ch:messages}
+
+Funis distinguishes three kinds of message. An \emph{input error} means that a field cannot be read. A
+message \emph{the task could not be solved} means that the data do not admit a solution of the task, and
+gives the reason. A \emph{warning}, shown in colour above the summary, accompanies a solution that holds
+but deserves attention. Table~\ref{tab:messages} lists the most frequent ones.
+
+{\small
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.44\linewidth}>{\raggedright\arraybackslash}p{0.52\linewidth}@{}}
+\caption{Frequent messages and what to do.}\label{tab:messages}\\
+\toprule
+\bfseries Message & \bfseries Meaning and remedy\\ \midrule
+\endfirsthead
+\toprule
+\bfseries Message & \bfseries Meaning and remedy\\ \midrule
+\endhead
+\bottomrule
+\endfoot
+\emph{Row …, column …: '…' is not a number} & A cell of a table holds text. Correct the cell.\\
+\emph{The helix needs R > 0 and an end angle beyond the start angle} & Check the radius and the
+angles.\\
+\emph{The plan of the path stops or reverses} & Two points of the table have the same plan position, or
+the plan turns back. Reorder or thin the points.\\
+\emph{The path has a stationary elevation} & A supported path needs a non-zero grade, since the thrust
+is the vertical force divided by the grade. Give the path a grade everywhere.\\
+\emph{The line is not in compression} & The thrust becomes positive somewhere. Raise the preload or
+check the loads.\\
+\emph{The required reaction leaves the contact cone} & The wall cannot supply the reaction with the
+given friction and strip. Read the admissible preloads and multipliers in the summary and in the
+\ui{Contact} tab.\\
+\emph{The contact cone needs μ > 0 and a positive strip width} & Correct the contact data, or switch
+off the contact check.\\
+\emph{The assigned path is not compatible with these loads without reactions} & No initial force makes
+the path an axial equilibrium. Use a supported path, or find the curve by form-finding.\\
+\emph{The horizontal force vanishes} & The curve would turn vertical, where the projected length
+stops being a parameter. Change the initial force or the loads.\\
+\emph{The endpoint correction stopped before reaching the target} & The second support may be out of
+reach. Improve the estimate of $\C$ or check the target.\\
+\emph{The horizontal force F₁ is not negative} & The plane line would turn vertical or into tension.
+Raise the thrust or change the point of the line.\\
+\emph{The point of the line must lie between the supports} & Use $0<x_c<L$.\\
+\emph{No thrust line lies within the arch under these loads} & By the safe theorem the arch is not
+shown to be safe. Read the geometric safety factor, below 1, and the eccentricities.\\
+\emph{The line through the three points lies outside the arch} & The prescribed line is not admissible
+at the listed joints. Other lines may be.\\
+\emph{The … folds back: the thickness exceeds twice the radius of curvature} & The intrados of a
+strongly curved centre line crosses itself. Reduce the thickness or change the shape.\\
+\emph{A pointed arch needs a rise larger than half the span} & Raise the rise, or use a circular
+arch.\\
+\emph{The point load at x = … is not above the extrados of the arch} & Move the load within the span of
+the extrados.\\
+\emph{Unexpected error} & An error of the program. Save the project and report it with the file on the
+issue page of the repository.\\
+\end{longtable}}
+
+% =================================================================
+\chapter{Hypotheses and limitations}\label{ch:limits}
+
+\begin{itemize}
+\item \textbf{Axial equilibrium.} Every task computes equilibrium states of lines carrying an axial force
+alone. It does not compute deformations, stresses in a section, buckling or dynamic response. A
+horizontal action is a pseudo-static load.
+\item \textbf{Spatial paths.} The projected length must be a regular parameter: the plan cannot stop,
+turn back or become vertical. A supported path needs a non-zero grade everywhere. The lateral support
+supplies horizontal reactions only.
+\item \textbf{Contact.} The cone describes the wall as a support with friction and, optionally, a
+centred strip. A violated cone is a statement on the support, not on the line, and the admissible
+intervals are not collapse loads.
+\item \textbf{Form-finding.} The horizontal force must stay positive. A second support is reached by a
+local correction from the estimate, which may fail for a target far from it.
+\item \textbf{Plane funicular.} The line must remain a function of $x$, with $F_1<0$ everywhere.
+\item \textbf{Arches.} The hypotheses of Heyman hold: no tensile strength, unlimited compressive
+strength and, with a zero friction coefficient, no sliding. The fill loads the arch but has no strength
+and no passive resistance. The arch is cut into a finite number of slices, so the results converge with
+the number of slices.
+\end{itemize}
+
+% =================================================================
+\appendix
+
+\chapter{Quick reference}\label{app:quick}
+
+\section{Keyboard shortcuts}\label{app:keys}
+
+\begin{center}\small
+\begin{tabular}{@{}lll@{}}
+\toprule
+\bfseries Command & \bfseries Windows & \bfseries macOS\\ \midrule
+New project & \kbd{Ctrl+N} & \kbd{⌘N}\\
+Open & \kbd{Ctrl+O} & \kbd{⌘O}\\
+Save & \kbd{Ctrl+S} & \kbd{⌘S}\\
+Save as & \kbd{Ctrl+Shift+S} & \kbd{⇧⌘S}\\
+Run & \kbd{F5} & \kbd{F5}\\
+User guide & \kbd{F1} & \kbd{⌘?}\\
+Quit & \kbd{Alt+F4} & \kbd{⌘Q}\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\section{Command line}\label{app:cli}
+
+\begin{center}\small
+\begin{tabularx}{\linewidth}{@{}>{\ttfamily\raggedright\arraybackslash}p{0.42\linewidth}X@{}}
+\toprule
+\normalfont\bfseries Command & \bfseries Effect\\ \midrule
+Funis project.funis & Open the window with a project.\\
+Funis -{}-selftest [image.png] & Solve every example without showing the window, save a screenshot and
+a report \file{image.log}, and exit with 0 when every example solves (Section~\ref{sec:selftest}).\\
+python run\_funis.py [project.funis] & The same from the source code.\\
+python -m funis & Start from the source code.\\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\section{Notation}\label{app:notation}
+
+{\small
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.16\linewidth}>{\raggedright\arraybackslash}p{0.8\linewidth}@{}}
+\toprule
+\bfseries Symbol & \bfseries Meaning\\ \midrule
+\endhead
+$\e_1,\e_2,\e_3$ & Unit vectors of the axes, $\e_3$ upward\\
+$s$, $L$ & Projected arc length and projected length of a spatial path\\
+$\x^*(s)$, $\x(s)$, $f(s)$ & Spatial path, its plan and its elevation\\
+$\tv$, $\nv$, $\rho$ & Projected unit tangent, left normal and projected curvature\\
+$f_{,s}$, $J$ & Grade and ratio of actual to projected length\\
+$\uv$, $\T$ & Tangent vector $\tv+f_{,s}\e_3$ and unit tangent of the spatial path\\
+$\F$, $S$, $N$, $V$ & Force, thrust, axial force and vertical force\\
+$\C$, $\Pv$ & Force at the start and primitive of the loads\\
+$\pp$, $\rr$ & Load and reaction per projected metre\\
+$w$, $h$, $\beta$, $\gamma$, $\lambda$ & Vertical and horizontal load densities, direction of the
+horizontal load, pseudo-static coefficient, multiplier of the horizontal load\\
+$T$ & Preload, $T=-S(0)$\\
+$r_t$, $r_n$, $r_\nu$ & Tangential, normal and wall-normal reaction\\
+$\mu$, $L_{sw}$, $\delta$, $\varphi$, $\eta$ & Friction coefficient, strip width, distance of the strip
+from the wall, strip limit and effective coefficient of the cone\\
+$\G$, $\R$ & Point force and point reaction\\
+$Q$ & Horizontal force of a free curve\\
+$\kappa$, $\tau$ & Curvature and torsion of a free curve\\
+$B$, $\mv$, $\dv$ & Conserved component, normal and direction of a vertical load plane\\
+$x$, $z$, $H$ & Abscissa, height and thrust in the plane tasks\\
+$t$, $b$, $e$ & Thickness and depth of an arch, eccentricity of the centre of pressure\\
+\bottomrule
+\end{longtable}}
+
+% =================================================================
+\renewcommand{\bibname}{References}
+\begin{thebibliography}{9}
+\bibitem{article} C.~Olivieri, \emph{Equilibrium and form-finding of spatial compression paths under
+multidirectional loading through Linear Arch Static Analysis}.
+\bibitem{funis} C.~Olivieri, \emph{Funis: equilibrium and form-finding of spatial compression paths},
+software, Zenodo, \href{https://doi.org/\FunisDOI}{doi:\FunisDOI}.
+\bibitem{heyman1966} J.~Heyman, The stone skeleton, \emph{International Journal of Solids and
+Structures} 2 (1966) 249--279, \href{https://doi.org/10.1016/0020-7683(66)90018-7}{doi:10.1016/0020-7683(66)90018-7}.
+\bibitem{heyman1969} J.~Heyman, The safety of masonry arches, \emph{International Journal of
+Mechanical Sciences} 11 (1969) 363--385,
+\href{https://doi.org/10.1016/0020-7403(69)90070-8}{doi:10.1016/0020-7403(69)90070-8}.
+\end{thebibliography}
+
+\end{document}
