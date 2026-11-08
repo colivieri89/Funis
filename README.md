@@ -1,10 +1,18 @@
 # Funis
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.24040974.svg)](https://doi.org/10.5281/zenodo.24040974)
+[![Tests](https://github.com/colivieri89/Funis/actions/workflows/tests.yml/badge.svg)](https://github.com/colivieri89/Funis/actions/workflows/tests.yml)
+[![Release](https://img.shields.io/github/v/release/colivieri89/Funis)](https://github.com/colivieri89/Funis/releases/latest)
+[![Licence: MIT](https://img.shields.io/badge/licence-MIT-blue.svg)](LICENSE)
+![Platforms](https://img.shields.io/badge/platform-Windows%20%7C%20macOS-lightgrey)
 
 Equilibrium and form-finding of spatial compression paths: the analytical Linear Arch Static Analysis (LASA) of continuous spatial compression paths under vertical and horizontal loads. The equations follow C. Olivieri, *Equilibrium and form-finding of spatial compression paths under multidirectional loading through Linear Arch Static Analysis*.
 
-Funis is a desktop application for Windows and macOS. It needs no other software: the installers contain everything, Python included.
+Funis is a desktop application for Windows and macOS. It needs no other software: the installers contain everything, Python included. **[Download the installers from the latest release.](https://github.com/colivieri89/Funis/releases/latest)**
+
+![Funis: a descending helical path under vertical and horizontal loads with its lateral reactions, in the rotatable spatial view](docs/screenshots/spatial_view.png)
+
+*Supported path: the circular benchmark of the article (Figs. 11 and 12), a descending helix under vertical and horizontal loads with its lateral reactions, in the rotatable spatial view.*
 
 ## What it does
 
@@ -20,6 +28,27 @@ Funis is a desktop application for Windows and macOS. It needs no other software
 The spatial tasks draw the plan with the load and reaction densities and the developed elevation to scale, the graphs along the path (forces, reactions, loads, residuals, curvature and torsion), the contact diagrams, and a rotatable spatial view. The plane tasks draw the line or the arch to scale with its loads, the graphs of the forces and of the eccentricity e/t, and for an arch the collapse mechanism, the reduced arch of the geometric safety factor, the arch of minimum thickness and the admissible thrusts. Every result carries independent checks: the global force and moment balance of all actions on the line and a finite-difference test of the local equations. Labels are placed at draw time clear of the geometry and of each other (`funis/labels.py`), on screen and in every exported file. Exports: PDF, SVG and PNG (fitted to a width, or views to scale with a scale bar), DXF (layers per view, 3D polyline of the path), CSV, Excel, JSON, a self-contained HTML report and the project file (`.funis`, JSON). The Examples menu holds the cases of the article (figure and section numbers refer to it), three reference cases, and the plane cases: funiculars checked against their closed forms and arches, among them the semicircular arch of minimum thickness under its own weight.
 
 Units: m and kN, load densities in kN per metre of projected length, angles in degrees. Tension positive, compression S ≤ 0. In the plane tasks x is horizontal and z vertical, the thrust is H = −F₁ > 0, unit weights are in kN/m³ and an arch carries its loads over the depth b normal to its plane.
+
+## Screenshots
+
+<table>
+  <tr>
+    <td width="50%"><a href="docs/screenshots/contact.png"><img src="docs/screenshots/contact.png" alt="Contact diagrams of the supported circular path"></a></td>
+    <td width="50%"><a href="docs/screenshots/form_finding.png"><img src="docs/screenshots/form_finding.png" alt="Form-finding of a free spatial curve"></a></td>
+  </tr>
+  <tr>
+    <td><sub>Supported path: contact margin and cone, admissible horizontal loads, minimum preload and admissible region of preload and load multiplier (Figs. 11 and 12).</sub></td>
+    <td><sub>Form-finding: the free curve of case C under vertical and horizontal loads, plan and developed elevation (Figs. 5 and 10).</sub></td>
+  </tr>
+  <tr>
+    <td width="50%"><a href="docs/screenshots/plane_funicular.png"><img src="docs/screenshots/plane_funicular.png" alt="Plane funicular: catenary under a pseudo-static action"></a></td>
+    <td width="50%"><a href="docs/screenshots/arch_assessment.png"><img src="docs/screenshots/arch_assessment.png" alt="Thrust line assessment of a semicircular arch"></a></td>
+  </tr>
+  <tr>
+    <td><sub>Plane funicular: a catenary through a given point under its weight and a pseudo-static horizontal action, with the reactions.</sub></td>
+    <td><sub>Arch assessment: lines of minimum and maximum thrust, loads and reactions, collapse mechanism under a horizontal action and geometric safety factor.</sub></td>
+  </tr>
+</table>
 
 ## Installation
 
@@ -69,8 +98,9 @@ funis/
   io/          project files, CSV, Excel, JSON, DXF, HTML report
   ui/          Qt interface: theme, panels, results view, dialogs, main window
   assets/      icon and user guide
-packaging/     PyInstaller spec, macOS and Windows build scripts, Inno Setup script
+packaging/     PyInstaller spec, macOS and Windows build scripts, Inno Setup script, icon and screenshots
 tests/         pytest suite
+docs/          screenshots of this README (python packaging/make_screenshots.py)
 ```
 
 The user guide is available from the Help menu and in `funis/assets/user_guide.html`.
