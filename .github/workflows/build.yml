@@ -71,9 +71,9 @@ jobs:
         with:
           path: installers
           merge-multiple: true
+      - name: Add the user manual, named after the version
+        run: cp docs/Funis_User_Manual.pdf "installers/Funis-${GITHUB_REF_NAME#v}-User-Manual.pdf"
       - uses: softprops/action-gh-release@v2
         with:
-          files: |
-            installers/*
-            docs/Funis_User_Manual.pdf
+          files: installers/*
           generate_release_notes: true
