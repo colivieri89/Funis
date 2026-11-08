@@ -31,6 +31,13 @@ LEAST_CLEARANCE = 1.0
 DISTANCES = (4.0, 6.0, 8.0, 11.0, 15.0, 20.0, 26.0, 34.0, 44.0)
 """Distances tried from the labelled point to the box of the label, in points."""
 
+FAR_DISTANCES = (60.0, 80.0, 110.0, 150.0)
+"""Further distances, in points, tried on large axes only (a figure exported at a large width),
+each where it is at most FAR_FRACTION of the smaller side of the axes."""
+
+FAR_FRACTION = 0.06
+"""Fraction of the smaller side of the axes up to which the FAR_DISTANCES are tried."""
+
 DEVIATIONS = (0, 15, -15, 30, -30, 45, -45, 60, -60, 75, -75, 90, -90, 105, -105, 120, -120,
               135, -135, 150, -150, 165, -165, 180)
 """Deviations tried from the preferred direction, in degrees, in order of preference."""
@@ -62,6 +69,7 @@ class LabelSet(Artist):
         self.font_size = font_size
         self.set_transform(IdentityTransform())
         self.set_zorder(5)
+        self.set_in_layout(False)  # always inside the axes: the layout of the figure ignores it
         self.items = []
         for it in drawing.items:
             if isinstance(it, Text):
@@ -108,6 +116,8 @@ class LabelSet(Artist):
         segs, srad, pts, prad, boxes = self._obstacles(T, k, renderer)
         clear = CLEARANCE * k
         bounds = ax.bbox.extents + np.array([clear, clear, -clear, -clear])
+        side = min(ax.bbox.width, ax.bbox.height) / k
+        distances = DISTANCES + tuple(d for d in FAR_DISTANCES if d <= FAR_FRACTION * side)
         placed, hidden = [], []
         for it, artist in self.items:
             p = T.transform(it.point)
@@ -123,7 +133,7 @@ class LabelSet(Artist):
             pad = BOX_PAD * artist.get_fontsize() * k
             w, h = ext.width + 2 * pad, ext.height + 2 * pad
             box, best = None, -np.inf
-            for d in DISTANCES:
+            for d in distances:
                 cand = _candidates(p, u, w, h, d * k)
                 cl = _clearance(cand, segs, srad, pts, prad, boxes)
                 outside = np.maximum.reduce([bounds[0] - cand[:, 0], cand[:, 2] - bounds[2],

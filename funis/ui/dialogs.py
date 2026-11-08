@@ -7,6 +7,7 @@ from PySide6.QtWidgets import (QCheckBox, QComboBox, QDialog, QDialogButtonBox, 
                                QTextBrowser, QVBoxLayout)
 
 from .. import __app_name__, __tagline__, __version__
+from ..render import MIN_WIDTH_CM
 from .widgets import IntSpin, Spin, form
 
 
@@ -35,7 +36,7 @@ class ExportDrawingsDialog(QDialog):
         f.addRow("Format", self.fmt)
         self.fit = QRadioButton("Fit to a width")
         self.fit.setChecked(True)
-        self.width = Spin(14.0, 2.0, 100.0, 1.0, 1, "cm")
+        self.width = Spin(14.0, MIN_WIDTH_CM, 100.0, 1.0, 1, "cm")
         self.to_scale = QRadioButton("Views to scale, without axes")
         self.length_scale = Spin(1.0, 0.001, 1000.0, 0.1, 3, "cm/m")
         self.force_scale = Spin(0.5, 0.0001, 1000.0, 0.01, 4, "cm/kN")

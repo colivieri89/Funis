@@ -2,7 +2,7 @@
   "version": "1.0.0",
   "built": "2026-11-08",
   "pdf": "docs/Funis_User_Manual.pdf",
-  "pdf_sha256": "855636df7ea76ff461daeb9f68fcaca778703131a9014bb1512223c4b1d44f0c",
+  "pdf_sha256": "77148cf8777d2506676db6f77fe21e50a239f6c13ea8c95d7626eb8045a56c70",
   "tasks": [
     "Supported path (assessment)",
     "Path without reactions",

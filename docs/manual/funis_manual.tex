@@ -83,6 +83,7 @@
 \renewcommand{\bottomfraction}{0.8}
 \renewcommand{\textfraction}{0.07}
 \renewcommand{\floatpagefraction}{0.75}
+\makeatletter\setlength{\@fptop}{0pt}\makeatother % float pages start at the top
 \setcounter{topnumber}{3}
 \setcounter{totalnumber}{5}
 \numberwithin{figure}{chapter}
@@ -1247,11 +1248,14 @@ button of the tool bar.
 \menu{Drawings (PDF, SVG, PNG)…} opens the dialog of Fig.~\ref{fig:export}. Select the drawings, the
 format and the size:
 \begin{description}[leftmargin=0pt,labelsep=0.5em]
-\item[Fit to a width.] Every drawing fills the given width with its axes and grid.
+\item[Fit to a width.] Every drawing fills the given width, from \MinWidth{} to 100~cm, with its axes and
+grid. The margins follow the texts of the drawing: a long title or axis label is broken into lines, and
+the height of the sheet follows the proportions of the drawing, so that no text is cut.
 \item[Views to scale, without axes.] Plans, elevations and diagrams are drawn to scale, as in a plate,
 with a scale bar and the title: the \ui{Length scale} in cm/m applies to plans and elevations, the
-\ui{Force scale} in cm/kN to diagrams in kN or kN/m. Graphs along the line are always fitted to the
-width.
+\ui{Force scale} in cm/kN to diagrams in kN or kN/m. The scale bar is about 5~cm long, shorter under a
+small drawing, and the sheet widens when the title or the text of the scale bar needs it. Graphs along
+the line are always fitted to the width.
 \item[Resolution.] The dots per inch of a PNG image.
 \end{description}
 Each drawing is written as \file{<base>\_<diagram>.<format>}, where \file{<diagram>} is the key of

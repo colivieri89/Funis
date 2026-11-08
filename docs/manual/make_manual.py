@@ -165,6 +165,7 @@ def citation():
 def write_generated(examples, results, callouts):
     from funis import __version__
     from funis.model import TASKS
+    from funis.render import MIN_WIDTH_CM
 
     os.makedirs(GENERATED, exist_ok=True)
     c = citation()
@@ -182,6 +183,7 @@ def write_generated(examples, results, callouts):
         r"\newcommand{\FunisTitle}{%s}" % tex(c["title"]),
         r"\newcommand{\NumberOfExamples}{%d}" % len(examples),
         r"\newcommand{\NumberOfTasks}{%d}" % len(TASKS),
+        r"\newcommand{\MinWidth}{%g}" % MIN_WIDTH_CM,
     ]
     with open(os.path.join(GENERATED, "metadata.tex"), "w", encoding="utf-8") as fh:
         fh.write("\n".join(lines) + "\n")
@@ -375,9 +377,8 @@ def make_figures(results):
     for fname, example, key, width in DRAWINGS:
         d = results[example]["result"].drawings[key]
         fig = figure_for(d, width_cm=width)
-        # the tight box keeps the axis labels and long titles that a narrow figure would cut
-        fig.savefig(os.path.join(FIGURES, fname + ".pdf"), facecolor="white", bbox_inches="tight",
-                    pad_inches=0.04)
+        # saved as File > Export > Drawings writes it
+        fig.savefig(os.path.join(FIGURES, fname + ".pdf"), facecolor="white")
         print(fname + ".pdf")
     return callouts
 
