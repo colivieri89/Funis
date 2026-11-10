@@ -13,7 +13,7 @@ length, angles in degrees at the interface and in radians inside the solvers.
 Tension is positive, so compression is S <= 0 and N <= 0.
 """
 
-__version__ = "1.0.0"
+__version__ = "1.1.0"
 __app_name__ = "Funis"
 __tagline__ = "Equilibrium and form-finding of spatial compression paths"
 __organization__ = "Funis"

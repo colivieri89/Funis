@@ -157,6 +157,14 @@ def _free(name, horizontal, notes, mode="initial"):
     return p
 
 
+def free_constant():
+    return _free("Fig. 8: funicular under constant loads, h/w = 1",
+                 dict(horizontal_mode="fixed", h=[1.0, 0, 0, 0], beta=0.0),
+                 "p = (h, 0, −w) with w = 1 kN/m and h/w = 1, C = (−3, −4, −2) kN, L = 5 m. Constant "
+                 "loads: the curve lies in the plane of C and the load direction, and its plan bends "
+                 "toward e₁. The article also draws h/w = 0, 0.5 and 2: change the coefficient a₀ of h.")
+
+
 def free_a():
     return _free("Fig. 11: free curve, case A (parallel loads)",
                  dict(horizontal_mode="fixed", h=[0.7, 0, 0, 0], beta=0.0),
@@ -366,6 +374,7 @@ EXAMPLES = OrderedDict([
     ("Without reactions: Fig. 3, the funicular of the same loads", lambda: reaction_free_check(0.0)),
     ("Without reactions: Fig. 4, three-component loading", reaction_free_three),
     ("Without reactions: Fig. 9, exceptional helical arc", reaction_free_arc),
+    ("Form-finding: Fig. 8, constant loads", free_constant),
     ("Form-finding: Fig. 11, case A", free_a),
     ("Form-finding: Fig. 11, case B", free_b),
     ("Form-finding: Figs. 5 and 11, case C", free_c),

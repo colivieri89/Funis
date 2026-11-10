@@ -1,8 +1,8 @@
 {
-  "version": "1.0.0",
+  "version": "1.1.0",
   "built": "2026-11-10",
   "pdf": "docs/Funis_User_Manual.pdf",
-  "pdf_sha256": "0ee41549b4a3169136619816d40275cfb30006834d7c480bf76bc1668d8db047",
+  "pdf_sha256": "9404938993a2e54b33c8bbadd833e9d0887e1a7aee5d980fe92a6c259c92e511",
   "tasks": [
     "Supported path (assessment)",
     "Path without reactions",
@@ -23,6 +23,7 @@
     "Without reactions: Fig. 3, the funicular of the same loads",
     "Without reactions: Fig. 4, three-component loading",
     "Without reactions: Fig. 9, exceptional helical arc",
+    "Form-finding: Fig. 8, constant loads",
     "Form-finding: Fig. 11, case A",
     "Form-finding: Fig. 11, case B",
     "Form-finding: Figs. 5 and 11, case C",

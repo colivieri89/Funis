@@ -37,6 +37,8 @@ def test_examples_reproduce_the_article():
     assert r.data["K_eigenvalues"] == pytest.approx([0.00304553, 0.693717], abs=1e-6)
     r = analysis.run(EXAMPLES["Form-finding: Fig. 11, case A"]())
     assert r.data["closed_form_error"] < 1e-10
+    r = analysis.run(EXAMPLES["Form-finding: Fig. 8, constant loads"]())
+    assert r.data["closed_form_error"] < 1e-10
     r = analysis.run(EXAMPLES["Without reactions: Fig. 3, path that is not an axial equilibrium"]())
     assert r.messages
     r = analysis.run(EXAMPLES["Without reactions: Fig. 3, the funicular of the same loads"]())

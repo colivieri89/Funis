@@ -2,7 +2,7 @@
 ; Compiled by packaging\build_windows.ps1 with /DAppVersion=<version> /DSourceDir=<repository root>.
 
 #ifndef AppVersion
-  #define AppVersion "1.0.0"
+  #define AppVersion "1.1.0"
 #endif
 #ifndef SourceDir
   #define SourceDir ".."
