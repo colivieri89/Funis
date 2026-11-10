@@ -50,15 +50,15 @@ sys.path.insert(0, ROOT)
 
 SIZE = (1480, 920)
 RESULT_SIZE = (1320, 860)
-BENCHMARK = "Supported: Figs. 11 and 12, circular benchmark with contact"
+BENCHMARK = "Supported: Figs. 12 and 13, circular benchmark with contact"
 
 # example, task-specific section keys to grab, file prefix
 SECTION_SHOTS = [
     (BENCHMARK, ("geometry", "loads", "points", "support", "contact", "output"), ""),
-    ("Supported: Fig. 9, ellipse with f = cθ", ("geometry",), "ellipse_"),
+    ("Supported: Fig. 10, ellipse with f = cθ", ("geometry",), "ellipse_"),
     ("Without reactions: Fig. 3, path that is not an axial equilibrium", ("geometry",), "points_"),
-    ("Supported: Section 7.4, point force on the helix", ("points",), "actions_"),
-    ("Without reactions: Fig. 8, exceptional helical arc", ("reaction_free",), ""),
+    ("Supported: Section 5.4, point force on the helix", ("points",), "actions_"),
+    ("Without reactions: Fig. 9, exceptional helical arc", ("reaction_free",), ""),
     ("Form-finding: Fig. 6, prescribed second support", ("form",), ""),
     ("Node: Fig. 7, concentrated multidirectional force", ("node",), ""),
     ("Plane: catenary under a pseudo-static action", ("funicular", "plane_loads"), ""),
@@ -72,9 +72,9 @@ RESULT_SHOTS = [
     ("results_views", BENCHMARK, 1),
     ("results_graphs", BENCHMARK, 2),
     ("results_contact", BENCHMARK, 3),
-    ("results_spatial", "Form-finding: Figs. 5 and 10, case C", 4),
+    ("results_spatial", "Form-finding: Figs. 5 and 11, case C", 4),
     ("results_tables", BENCHMARK, 5),
-    ("results_warning", "Supported: Fig. 11, contact violated at h/w = 4", 0),
+    ("results_warning", "Supported: Fig. 12, contact violated at h/w = 4", 0),
     ("results_rf", "Without reactions: Fig. 3, path that is not an axial equilibrium", 1),
     ("results_ff", "Form-finding: Fig. 6, prescribed second support", 1),
     ("results_node", "Node: Fig. 7, concentrated multidirectional force", 1),
@@ -91,9 +91,9 @@ DRAWINGS = [
     ("sup_region", BENCHMARK, "region", 8.0),
     ("sup_domain", BENCHMARK, "domain", 8.0),
     ("rf_residual", "Without reactions: Fig. 3, path that is not an axial equilibrium", "residual", 8.0),
-    ("rf_loads", "Without reactions: Fig. 8, exceptional helical arc", "loads", 8.0),
-    ("ff_plan", "Form-finding: Figs. 5 and 10, case C", "plan", 8.0),
-    ("ff_elevation", "Form-finding: Figs. 5 and 10, case C", "elevation", 8.0),
+    ("rf_loads", "Without reactions: Fig. 9, exceptional helical arc", "loads", 8.0),
+    ("ff_plan", "Form-finding: Figs. 5 and 11, case C", "plan", 8.0),
+    ("ff_elevation", "Form-finding: Figs. 5 and 11, case C", "elevation", 8.0),
     ("ff_iterates", "Form-finding: Fig. 6, prescribed second support", "iterates", 8.0),
     ("ff_newton", "Form-finding: Fig. 6, prescribed second support", "newton", 8.0),
     ("node_polygon", "Node: Fig. 7, concentrated multidirectional force", "polygon", 8.0),
@@ -109,7 +109,7 @@ DRAWINGS = [
 # worked examples whose summary is printed in the manual: macro suffix, example
 SUMMARIES = [
     ("Benchmark", BENCHMARK),
-    ("Violated", "Supported: Fig. 11, contact violated at h/w = 4"),
+    ("Violated", "Supported: Fig. 12, contact violated at h/w = 4"),
     ("NotAxial", "Without reactions: Fig. 3, path that is not an axial equilibrium"),
     ("SecondSupport", "Form-finding: Fig. 6, prescribed second support"),
     ("Node", "Node: Fig. 7, concentrated multidirectional force"),

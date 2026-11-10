@@ -24,18 +24,18 @@ def test_example_runs(name):
 
 
 def test_examples_reproduce_the_article():
-    r = analysis.run(EXAMPLES["Supported: Figs. 11 and 12, circular benchmark with contact"]())
+    r = analysis.run(EXAMPLES["Supported: Figs. 12 and 13, circular benchmark with contact"]())
     assert r.data["critical"] == pytest.approx(2.27890, abs=1e-4)
     assert r.data["critical_exact"] == pytest.approx(2.27890, abs=1e-5)
     assert r.data["T_min"] == pytest.approx(r.data["T_min_exact"], abs=1e-5)
-    r = analysis.run(EXAMPLES["Supported: Section 7.3, pseudo-static action"]())
+    r = analysis.run(EXAMPLES["Supported: Section 5.3, pseudo-static action"]())
     assert r.data["T_min"] == pytest.approx(5.6667, abs=1e-4)
-    r = analysis.run(EXAMPLES["Supported: Fig. 11, contact violated at h/w = 4"]())
+    r = analysis.run(EXAMPLES["Supported: Fig. 12, contact violated at h/w = 4"]())
     assert np.min(r.data["margin"]) < 0 and r.messages
     r = analysis.run(EXAMPLES["Form-finding: Fig. 6, prescribed second support"]())
     assert r.data["C"] == pytest.approx([-3, -4, -2], abs=1e-5)
     assert r.data["K_eigenvalues"] == pytest.approx([0.00304553, 0.693717], abs=1e-6)
-    r = analysis.run(EXAMPLES["Form-finding: Fig. 10, case A"]())
+    r = analysis.run(EXAMPLES["Form-finding: Fig. 11, case A"]())
     assert r.data["closed_form_error"] < 1e-10
     r = analysis.run(EXAMPLES["Without reactions: Fig. 3, path that is not an axial equilibrium"]())
     assert r.messages
@@ -72,7 +72,7 @@ def test_unknown_keys_are_ignored():
 
 
 def test_exports(tmp_path):
-    res = analysis.run(EXAMPLES["Supported: Section 7.4, point force on the helix"]())
+    res = analysis.run(EXAMPLES["Supported: Section 5.4, point force on the helix"]())
     tables.to_csv(res, tmp_path / "r.csv")
     tables.to_xlsx(res, tmp_path / "r.xlsx")
     tables.to_json(res, tmp_path / "r.json")
@@ -91,7 +91,7 @@ def test_input_errors_are_reported():
     p.form.target = [100.0, 0.0, 0.0]
     with pytest.raises(analysis.InputError):
         analysis.run(p)
-    p = EXAMPLES["Supported: Figs. 11 and 12, circular benchmark with contact"]()
+    p = EXAMPLES["Supported: Figs. 12 and 13, circular benchmark with contact"]()
     p.geometry.helix.pitch = 0.0
     with pytest.raises(analysis.InputError):
         analysis.run(p)
@@ -102,7 +102,7 @@ def test_input_errors_are_reported():
 
 
 def test_point_action_outside_the_path_is_reported():
-    p = EXAMPLES["Supported: Section 7.4, point force on the helix"]()
+    p = EXAMPLES["Supported: Section 5.4, point force on the helix"]()
     p.point_actions[0].s = 100.0
     res = analysis.run(p)
     assert any("ignored" in m for m in res.messages)

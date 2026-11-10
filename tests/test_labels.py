@@ -109,7 +109,7 @@ def test_a_narrow_figure_keeps_its_texts():
 
 def test_the_margins_follow_the_texts():
     """No band of empty sheet beyond the outermost texts, at any width."""
-    d = RESULTS["Supported: Figs. 11 and 12, circular benchmark with contact"].drawings["plan"]
+    d = RESULTS["Supported: Figs. 12 and 13, circular benchmark with contact"].drawings["plan"]
     for width in (MIN_WIDTH_CM, 9.0, 14.0, 40.0):
         fig = figure_for(d, width_cm=width, dpi=100)
         tight = fig.get_tightbbox(fig.canvas.get_renderer())
@@ -143,7 +143,7 @@ def test_labels_clear_in_the_window_panels(name):
 
 def test_labels_follow_a_resize():
     """The same drawing placed on two canvas sizes keeps its clearance on both."""
-    d = RESULTS["Supported: Section 7.4, point force on the helix"].drawings["plan"]
+    d = RESULTS["Supported: Section 5.4, point force on the helix"].drawings["plan"]
     fig = _grid_figure([d], 600, 400)
     worst, _ = _worst(fig)
     assert worst[2] >= MIN_CLEARANCE

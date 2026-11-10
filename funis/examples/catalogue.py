@@ -43,16 +43,16 @@ def supported_fig2():
 
 def supported_benchmark():
     return _benchmark(
-        "Figs. 11 and 12: supported circular benchmark, h = 2 kN/m", 360.0, 2.0,
+        "Figs. 12 and 13: supported circular benchmark, h = 2 kN/m", 360.0, 2.0,
         "Complete turn of the benchmark, S = −8 − 4θ, r_t = 2 + h sin θ, r_n = 4 + 2θ + h cos θ. "
         "Contact with μ = 0.6 and a centred strip L_sw = 0.8 m at δ = 0.5 m, so φ = 0.8 and "
-        "η = 0.6. The Contact tab shows the admissible loads at T = 8 kN (Fig. 12a) and the "
-        "minimum preload along three directions (Fig. 12b).")
+        "η = 0.6. The Contact tab shows the admissible loads at T = 8 kN (Fig. 13a) and the "
+        "minimum preload along three directions (Fig. 13b).")
 
 
 def supported_h4():
     p = _benchmark(
-        "Fig. 11: contact violated at h/w = 4", 360.0, 4.0,
+        "Fig. 12: contact violated at h/w = 4", 360.0, 4.0,
         "The benchmark with h = 4 kN/m: the line stays in compression, while the required reaction "
         "leaves the contact cone near the start, so the contact margin is negative there.")
     return p
@@ -60,7 +60,7 @@ def supported_h4():
 
 def supported_pseudo():
     p = _benchmark(
-        "Section 7.3: pseudo-static action γ = 0.5", 360.0, 0.0,
+        "Section 5.3: pseudo-static action γ = 0.5", 360.0, 0.0,
         "Horizontal action proportional to the vertical load, h = γ w along e₁ with γ = 0.5. "
         "The axial force is unaffected and the minimum preload is 5.67 kN, against 6.67 kN "
         "without horizontal action.")
@@ -71,7 +71,7 @@ def supported_pseudo():
 
 def supported_point():
     p = _benchmark(
-        "Section 7.4: point force on the complete supported helix", 360.0, 1.0,
+        "Section 5.4: point force on the complete supported helix", 360.0, 1.0,
         "Point force G = (2, 0, −1) kN at θ = 5.7 rad (s = 11.4 m) with h = 1 kN/m. The thrust "
         "jumps by −G₃ / f,s = −2 kN and the horizontal point reaction R_h = (G₃ / f,s) t − G_h "
         "≈ (−0.90, 1.67, 0) kN satisfies the point contact cone with η = 0.6.")
@@ -81,11 +81,11 @@ def supported_point():
 
 def supported_ellipse(mode):
     if mode == "angle":
-        name = "Fig. 9: elliptical path with f = cθ"
+        name = "Fig. 10: elliptical path with f = cθ"
         pitch = -1.0
         text = "f = cθ with c = −1 m/rad"
     else:
-        name = "Fig. 9: elliptical path with f = k_s s"
+        name = "Fig. 10: elliptical path with f = k_s s"
         L = ellipse(3.0, 2.0, -1.0, 0.0, 2 * np.pi, 2001).L
         pitch = float(-2 * np.pi / L)
         text = "f = k_s s with k_s = −2π / L = %.6f, for the same total drop of 2π m" % pitch
@@ -102,7 +102,7 @@ def supported_ellipse(mode):
 
 
 def reaction_free_arc():
-    p = Project(name="Fig. 8: exceptional reaction-free circular helical arc", task="reaction_free")
+    p = Project(name="Fig. 9: exceptional reaction-free circular helical arc", task="reaction_free")
     a0, a1 = np.degrees(np.pi + 0.15), np.degrees(np.pi + 1.2)
     p.geometry = GeometrySpec(kind="helix", helix=HelixSpec(2.0, -1.0, a0, a1))
     p.reaction_free = ReactionFreeSpec(mode="fixed_plane", B=3.0, beta=0.0)
@@ -158,7 +158,7 @@ def _free(name, horizontal, notes, mode="initial"):
 
 
 def free_a():
-    return _free("Fig. 10: free curve, case A (parallel loads)",
+    return _free("Fig. 11: free curve, case A (parallel loads)",
                  dict(horizontal_mode="fixed", h=[0.7, 0, 0, 0], beta=0.0),
                  "p = (0.7, 0, −1) kN/m, C = (−3, −4, −2) kN, L = 5 m. Parallel loads: the curve lies in "
                  "the plane of C and the load direction and has zero torsion. The closed form of "
@@ -166,14 +166,14 @@ def free_a():
 
 
 def free_b():
-    return _free("Fig. 10: free curve, case B",
+    return _free("Fig. 11: free curve, case B",
                  dict(horizontal_mode="fixed", h=[0.7, 0.2, 0, 0], beta=0.0),
                  "p = (0.7 + 0.2 s, 0, −1) kN/m, C = (−3, −4, −2) kN, L = 5 m. The load direction varies "
                  "and the curve leaves the plane of case A, up to about 0.32 m.")
 
 
 def free_c():
-    return _free("Figs. 5 and 10: free curve, case C",
+    return _free("Figs. 5 and 11: free curve, case C",
                  dict(horizontal_mode="components", p1=[0.7, 0.2, 0, 0], p2=[0.0, 0.3, 0, 0]),
                  "p = (0.7 + 0.2 s, 0.3 s, −1) kN/m, C = (−3, −4, −2) kN, L = 5 m. The final support "
                  "x*(5 m) ≈ (3.58655144, 3.46958475, −0.09396228) m is an output of the construction.")
@@ -233,7 +233,7 @@ def node_fig7():
 
 def node_horizontal():
     p = node_fig7()
-    p.name = "Section 7.4: node under a horizontal point force"
+    p.name = "Section 5.4: node under a horizontal point force"
     p.node.load = [2.0, 0.0, 0.0]
     p.notes = "F⁻ = (−3, −2, −1) kN and G = (2, 0, 0) kN: the tangent turns by 12.6044°."
     return p
@@ -356,25 +356,25 @@ def arch_voussoirs():
 
 EXAMPLES = OrderedDict([
     ("Supported: Fig. 2, reaction shift on the circular path", supported_fig2),
-    ("Supported: Figs. 11 and 12, circular benchmark with contact", supported_benchmark),
-    ("Supported: Fig. 11, contact violated at h/w = 4", supported_h4),
-    ("Supported: Section 7.3, pseudo-static action", supported_pseudo),
-    ("Supported: Section 7.4, point force on the helix", supported_point),
-    ("Supported: Fig. 9, ellipse with f = cθ", lambda: supported_ellipse("angle")),
-    ("Supported: Fig. 9, ellipse with f = k_s s", lambda: supported_ellipse("arc")),
+    ("Supported: Figs. 12 and 13, circular benchmark with contact", supported_benchmark),
+    ("Supported: Fig. 12, contact violated at h/w = 4", supported_h4),
+    ("Supported: Section 5.3, pseudo-static action", supported_pseudo),
+    ("Supported: Section 5.4, point force on the helix", supported_point),
+    ("Supported: Fig. 10, ellipse with f = cθ", lambda: supported_ellipse("angle")),
+    ("Supported: Fig. 10, ellipse with f = k_s s", lambda: supported_ellipse("arc")),
     ("Without reactions: Fig. 3, path that is not an axial equilibrium", lambda: reaction_free_check(0.6)),
     ("Without reactions: Fig. 3, the funicular of the same loads", lambda: reaction_free_check(0.0)),
     ("Without reactions: Fig. 4, three-component loading", reaction_free_three),
-    ("Without reactions: Fig. 8, exceptional helical arc", reaction_free_arc),
-    ("Form-finding: Fig. 10, case A", free_a),
-    ("Form-finding: Fig. 10, case B", free_b),
-    ("Form-finding: Figs. 5 and 10, case C", free_c),
+    ("Without reactions: Fig. 9, exceptional helical arc", reaction_free_arc),
+    ("Form-finding: Fig. 11, case A", free_a),
+    ("Form-finding: Fig. 11, case B", free_b),
+    ("Form-finding: Figs. 5 and 11, case C", free_c),
     ("Form-finding: Fig. 6, prescribed second support", free_c_endpoint),
     ("Form-finding: case C with a point force", free_c_point),
     ("Form-finding: catenary under self-weight", catenary),
     ("Form-finding: parabolic arch", parabola),
     ("Node: Fig. 7, concentrated multidirectional force", node_fig7),
-    ("Node: Section 7.4, horizontal point force", node_horizontal),
+    ("Node: Section 5.4, horizontal point force", node_horizontal),
     ("Plane: catenary through a point", plane_catenary),
     ("Plane: parabola through a point", plane_parabola),
     ("Plane: constant vertical and horizontal loads", plane_horizontal),

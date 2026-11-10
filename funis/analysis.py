@@ -397,7 +397,7 @@ def run_supported(project):
                                                        "R₁ [kN]", "R₂ [kN]", "R_t [kN]", "R_ν [kN]",
                                                        "cone margin [kN]"], prow,
                                      "Jump [S] = −G₃ / f,s and horizontal point reaction "
-                                     "R_h = (G₃ / f,s) t − G_h, with no vertical support impulse.")
+                                     "R_h = (G₃ / f,s) t − G_h, with no vertical point reaction.")
     res.tables["balance"] = _balance_table(bal, local)
 
     # drawings

@@ -12,7 +12,7 @@ Funis is a desktop application for Windows and macOS. It needs no other software
 
 ![Funis: a descending helical path under vertical and horizontal loads with its lateral reactions, in the rotatable spatial view](docs/screenshots/spatial_view.png)
 
-*Supported path: the circular benchmark of the article (Figs. 11 and 12), a descending helix under vertical and horizontal loads with its lateral reactions, in the rotatable spatial view.*
+*Supported path: the circular benchmark of the article (Figs. 12 and 13), a descending helix under vertical and horizontal loads with its lateral reactions, in the rotatable spatial view.*
 
 ## What it does
 
@@ -37,8 +37,8 @@ Units: m and kN, load densities in kN per metre of projected length, angles in d
     <td width="50%"><a href="docs/screenshots/form_finding.png"><img src="docs/screenshots/form_finding.png" alt="Form-finding of a free spatial curve"></a></td>
   </tr>
   <tr>
-    <td><sub>Supported path: contact margin and cone, admissible horizontal loads, minimum preload and admissible region of preload and load multiplier (Figs. 11 and 12).</sub></td>
-    <td><sub>Form-finding: the free curve of case C under vertical and horizontal loads, plan and developed elevation (Figs. 5 and 10).</sub></td>
+    <td><sub>Supported path: contact margin and cone, admissible horizontal loads, minimum preload and admissible region of preload and load multiplier (Figs. 12 and 13).</sub></td>
+    <td><sub>Form-finding: the free curve of case C under vertical and horizontal loads, plan and developed elevation (Figs. 5 and 11).</sub></td>
   </tr>
   <tr>
     <td width="50%"><a href="docs/screenshots/plane_funicular.png"><img src="docs/screenshots/plane_funicular.png" alt="Plane funicular: catenary under a pseudo-static action"></a></td>

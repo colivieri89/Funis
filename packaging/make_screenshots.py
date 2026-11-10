@@ -34,9 +34,9 @@ from funis.ui.main_window import MainWindow  # noqa: E402
 
 TABS = {"views": 1, "contact": 3, "spatial": 4}
 SHOTS = [  # file name, example, tab of the results
-    ("spatial_view", "Supported: Figs. 11 and 12, circular benchmark with contact", "spatial"),
-    ("contact", "Supported: Figs. 11 and 12, circular benchmark with contact", "contact"),
-    ("form_finding", "Form-finding: Figs. 5 and 10, case C", "views"),
+    ("spatial_view", "Supported: Figs. 12 and 13, circular benchmark with contact", "spatial"),
+    ("contact", "Supported: Figs. 12 and 13, circular benchmark with contact", "contact"),
+    ("form_finding", "Form-finding: Figs. 5 and 11, case C", "views"),
     ("plane_funicular", "Plane: catenary under a pseudo-static action", "views"),
     ("arch_assessment", "Arch: semicircular arch under a horizontal action", "views"),
 ]

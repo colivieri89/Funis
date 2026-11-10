@@ -17,7 +17,7 @@ from .panels import ModelPanel
 from .results_view import ResultsView
 
 ASSETS = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "assets")
-DEFAULT_EXAMPLE = "Supported: Figs. 11 and 12, circular benchmark with contact"
+DEFAULT_EXAMPLE = "Supported: Figs. 12 and 13, circular benchmark with contact"
 
 
 class MainWindow(QMainWindow):

@@ -5,7 +5,7 @@ the loads (and the jumps of the point actions), and an assigned path is in
 axial equilibrium only if (C - P) x u = 0 everywhere (Section 3). For a
 free curve the force fixes the tangent, x*_{,s} = -F / Q with Q = |F_h|, so
 the curve follows from the initial force by quadrature, S = -Q and
-N = -|F| (Section 4). The endpoint map E(C) and its Jacobian select the
+N = -|F| (Section 3). The endpoint map E(C) and its Jacobian select the
 initial force that reaches a prescribed support (damped Newton correction).
 """
 import numpy as np
@@ -273,7 +273,7 @@ def constant_load_curve(s, C, p, x0):
 # ---------------------------------------------------------------- node
 
 def node(F_before, G, R=None):
-    """Force after a node and the tangents of the two members (Section 5).
+    """Force after a node and the tangents of the two members (Section 3).
 
     [F] = F+ - F- = -G - R, T = -F / |F| in compression.
     """

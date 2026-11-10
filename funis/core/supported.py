@@ -5,7 +5,7 @@ N = S J, and the two horizontal balances give the reactions the lateral
 support must supply, r_t = -S_s - p_h . t and r_n = -rho S - p_h . n. Adding a
 horizontal load leaves S unchanged and shifts the reaction by -p_h. A
 concentrated force G at s_j with a horizontal point reaction and no vertical
-support impulse gives the jump [S] = -G3 / f_s and R_h = (G3 / f_s) t - G_h.
+point reaction gives the jump [S] = -G3 / f_s and R_h = (G3 / f_s) t - G_h.
 """
 import numpy as np
 
